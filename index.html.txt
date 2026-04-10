@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة طالب العلم</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .card:active { transform: scale(0.95); }
+        .card h3 { margin: 10px 0 0 0; font-size: 16px; }
+        .card icon { font-size: 30px; }
+        .footer { margin-top: 30px; font-size: 12px; color: #888; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>بوابة كلية الإمام مالك</h2>
+        <p>مرحباً بك يا طالب العلم</p>
+    </div>
+
+    <div class="grid-container">
+        <div class="card" onclick="openLink('https://t.me/your_aqida_channel')">
+            <icon>📜</icon>
+            <h3>شرح العقيدة</h3>
+        </div>
+        <div class="card" onclick="openLink('https://t.me/your_nahw_channel')">
+            <icon>🖋️</icon>
+            <h3>علم النحو</h3>
+        </div>
+        <div class="card" onclick="openLink('https://t.me/your_usul_channel')">
+            <icon>📚</icon>
+            <h3>أصول الفقه</h3>
+        </div>
+        <div class="card" onclick="openLink('https://t.me/your_daily_channel')">
+            <icon>🕌</icon>
+            <h3>الورد اليومي</h3>
+        </div>
+    </div>
+
+    <div class="footer">جميع الحقوق محفوظة لقنوات كلية الإمام مالك</div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // لفتح التطبيق بملء الشاشة
+
+        function openLink(url) {
+            tg.openTelegramLink(url); // لفتح رابط القناة داخل تلجرام
+        }
+    </script>
+</body>
+</html>
