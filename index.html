@@ -3,171 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بوابة السكينة الأكاديمية</title>
+    <title>بوابة النخبة - كلية الإمام مالك</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg: #fdfdfd;
-            --soft-green: #e8f5e9;
-            --main-green: #4caf50;
-            --gold: #d4af37;
-            --text: #2e3440;
-            --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --primary: #0f172a; --accent: #d4af37; --text-light: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.95); --glass: rgba(255, 255, 255, 0.1);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: var(--bg); color: var(--text);
-            margin: 0; padding: 0; overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, sans-serif; background: #0f172a;
+            margin: 0; padding: 0; color: var(--text-light); transition: 0.5s;
         }
 
-        /* شريط الأذكار النبوية المتحرك */
-        .dhikr-ticker {
-            background: var(--soft-green);
-            color: var(--main-green);
-            padding: 8px 0; font-size: 13px; font-weight: bold;
-            overflow: hidden; white-space: nowrap;
-            border-bottom: 1px solid rgba(76, 175, 80, 0.1);
+        /* الخلفية المتحركة */
+        .bg-animate {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, #0f172a, #1e293b, #0f172a);
+            background-size: 400% 400%; z-index: -1; animation: gradient 15s ease infinite;
         }
-        .dhikr-text {
-            display: inline-block; padding-left: 100%;
-            animation: ticker 25s linear infinite;
+        @keyframes gradient { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
+
+        /* الهوية الجامعية */
+        .id-card {
+            margin: 20px; padding: 25px; border-radius: 25px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(20px); border: 1px solid var(--glass);
+            display: flex; flex-direction: column; align-items: center;
         }
-        @keyframes ticker {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(100%, 0); }
+        .user-photo {
+            width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); margin-bottom: 15px;
         }
 
-        /* بروفايل المستخدم الناعم */
-        .user-section {
-            background: white; padding: 40px 20px 20px; text-align: center;
+        /* شبكة الأقسام */
+        .main-menu {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 100px;
         }
-        .avatar-box {
-            width: 85px; height: 85px; border-radius: 40px;
-            margin: 0 auto 15px; border: 3px solid white;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1); overflow: hidden;
+        .nav-card {
+            background: var(--glass); padding: 25px 15px; border-radius: 22px;
+            text-align: center; border: 1px solid var(--glass); transition: 0.3s;
+        }
+        .nav-card:active { transform: scale(0.9); background: var(--accent); color: var(--primary); }
+        .nav-card i { font-size: 30px; margin-bottom: 12px; display: block; color: var(--accent); }
+        .nav-card:active i { color: var(--primary); }
+
+        /* عرض المحتوى الداخلي */
+        .content-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; z-index: 1000; padding: 20px; box-sizing: border-box;
+            overflow-y: auto; animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes slideUp { from {transform: translateY(100%);} to {transform: translateY(0);} }
+
+        .list-item {
+            background: rgba(255,255,255,0.05); margin-bottom: 10px; padding: 18px;
+            border-radius: 15px; display: flex; justify-content: space-between; align-items: center;
         }
 
-        .user-status-btn {
-            display: inline-block; padding: 6px 18px; border-radius: 25px;
-            background: var(--main-green); color: white; font-size: 12px;
-            margin-top: 10px; cursor: pointer; border: none; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        /* السبحة الإلكترونية - ميزة خارج الصندوق */
+        .tasbih-box {
+            background: var(--accent); color: var(--primary); padding: 15px;
+            border-radius: 20px; margin: 20px; text-align: center; font-weight: bold;
         }
 
-        /* إحصائيات القسم */
-        .stat-label { font-size: 11px; color: #888; margin-top: 5px; font-weight: bold; }
-
-        /* الشبكة الرئيسية بألوان هادئة */
-        .main-grid {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 20px; padding: 25px;
+        /* شريط سفلي ذكي */
+        .tab-bar {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; background: rgba(255,255,255,0.1); backdrop-filter: blur(25px);
+            border-radius: 30px; display: flex; justify-content: space-around; padding: 12px;
+            border: 1px solid var(--glass); z-index: 900;
         }
-        .item-card {
-            background: white; border-radius: 30px; padding: 25px 15px;
-            text-align: center; transition: 0.3s;
-            box-shadow: var(--card-shadow); border: 1px solid #f0f0f0;
-        }
-        .item-card:active { transform: scale(0.95); background: var(--soft-green); }
-        .item-card i { font-size: 30px; color: var(--main-green); margin-bottom: 12px; display: block; }
-
-        /* ميزة خارج الصندوق: عداد الإنجاز */
-        .progress-box {
-            background: white; margin: 0 25px 20px; padding: 20px;
-            border-radius: 25px; box-shadow: var(--card-shadow);
-        }
-        .progress-bar {
-            height: 8px; background: #eee; border-radius: 10px; margin-top: 10px; overflow: hidden;
-        }
-        .progress-fill { height: 100%; background: var(--main-green); width: 40%; transition: 0.5s; }
-
-        /* واجهة الـ 12 عنصراً */
-        .overlay {
-            display: none; position: fixed; inset: 0; background: var(--bg);
-            z-index: 1000; padding: 25px; overflow-y: auto;
-        }
-        .grid-12 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .sub-item {
-            background: white; padding: 20px; border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03); border-right: 4px solid var(--gold);
-            font-size: 13px; font-weight: bold;
-        }
+        .tab-item { color: var(--text-light); opacity: 0.6; font-size: 20px; }
+        .tab-item.active { opacity: 1; color: var(--accent); }
 
     </style>
 </head>
 <body>
 
-    <div class="dhikr-ticker">
-        <div class="dhikr-text">
-            اللهم إني أسألك علماً نافعاً، ورزقاً طيباً، وعملاً متقبلاً • ربي زدني علماً • اللهم انفعني بما علمتني وعلمني ما ينفعني • لا إله إلا أنت سبحانك إني كنت من الظالمين
-        </div>
+    <div class="bg-animate"></div>
+
+    <div class="id-card">
+        <img id="u-img" src="https://via.placeholder.com/80" class="user-photo">
+        <h2 id="u-name" style="margin: 5px 0; font-size: 20px;">طالب العلم</h2>
+        <div style="font-size: 12px; color: var(--accent); letter-spacing: 2px;">كود: <span id="u-id">000000</span></div>
+        <div style="margin-top: 10px; font-size: 11px; opacity: 0.7;">بوابة كلية الإمام مالك الرقمية</div>
     </div>
 
-    <div class="user-section">
-        <div class="avatar-box"><img id="u-pic" src="https://via.placeholder.com/90" style="width:100%"></div>
-        <h2 id="u-name" style="margin:0; font-size: 22px;">طالب العلم</h2>
-        <div id="u-dept" style="color: var(--main-green); font-size: 14px; margin-top:5px; font-weight: bold;">يرجى اختيار قسمك</div>
-        <button class="user-status-btn" onclick="setDept()">تعديل التخصص ⚙️</button>
+    <div class="tasbih-box" onclick="countTasbih()">
+        📿 السبحة الإلكترونية: <span id="t-count">0</span>
     </div>
 
-    <div class="progress-box">
-        <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:bold;">
-            <span>مستوى إنجازك اليوم</span>
-            <span style="color: var(--main-green);">40%</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill"></div></div>
-    </div>
-
-    <div class="main-grid">
-        <div class="item-card" onclick="open12('دروس السنة الأولى')">
-            <i class="fas fa-leaf"></i>
+    <div class="main-menu">
+        <div class="nav-card" onclick="showSub('year1')">
+            <i class="fas fa-book-open"></i>
             <b>السنة الأولى</b>
-            <div class="stat-label">👥 5,230 عضو</div>
         </div>
-        <div class="item-card" onclick="open12('دروس السنة الثانية')">
-            <i class="fas fa-seedling"></i>
+        <div class="nav-card" onclick="showSub('year2')">
+            <i class="fas fa-graduation-cap"></i>
             <b>السنة الثانية</b>
-            <div class="stat-label">👥 4,890 عضو</div>
         </div>
-        <div class="item-card" onclick="tg.openTelegramLink('https://t.me/your_library')">
-            <i class="fas fa-book-open-reader"></i>
-            <b>المكتبة</b>
-            <div class="stat-label">📚 850 كتاب</div>
+        <div class="nav-card" onclick="openExt('https://t.me/your_library')">
+            <i class="fas fa-file-pdf"></i>
+            <b>المكتبة الشاملة</b>
         </div>
-        <div class="item-card" onclick="tg.openTelegramLink('https://t.me/your_ads')">
-            <i class="fas fa-star"></i>
-            <b>الأخبار</b>
-            <div class="stat-label">📢 متجدد دائماً</div>
+        <div class="nav-card" onclick="openExt('https://t.me/your_ads')">
+            <i class="fas fa-bullhorn"></i>
+            <b>الإعلانات</b>
         </div>
     </div>
 
-    <div id="view-12" class="overlay">
-        <div style="color: var(--main-green); margin-bottom: 20px; font-weight: bold;" onclick="close12()">✕ عودة للرئيسية</div>
-        <h3 id="view-title" style="color: var(--text); margin-bottom: 25px;"></h3>
-        <div class="grid-12" id="grid-content"></div>
+    <div id="sub-view" class="content-overlay">
+        <div onclick="closeSub()" style="color: var(--accent); margin-bottom: 20px; cursor: pointer;">
+            <i class="fas fa-chevron-right"></i> عودة للرئيسية
+        </div>
+        <h2 id="sub-title" style="margin-bottom: 25px;"></h2>
+        <div id="sub-list"></div>
+    </div>
+
+    <div class="tab-bar">
+        <i class="fas fa-home tab-item active" onclick="location.reload()"></i>
+        <i class="fas fa-share-alt tab-item" onclick="shareApp()"></i>
+        <i class="fas fa-moon tab-item" onclick="toggleTheme()"></i>
+        <i class="fas fa-user-graduate tab-item" onclick="tg.showAlert('بوابة الطالب v7.0')"></i>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready(); tg.expand();
-        tg.setHeaderColor('#fdfdfd');
+        tg.setHeaderColor('#0f172a');
 
+        // جلب بيانات المستخدم
         const user = tg.initDataUnsafe?.user;
         if(user) {
             document.getElementById('u-name').innerText = user.first_name;
-            if(user.photo_url) document.getElementById('u-pic').src = user.photo_url;
+            document.getElementById('u-id').innerText = user.id;
+            if(user.photo_url) document.getElementById('u-img').src = user.photo_url;
         }
 
-        function setDept() {
-            tg.showPopup({
-                title: 'تخصيص الملف',
-                message: 'اختر قسمك الدراسي:',
-                buttons: [
-                    {id: 's', type: 'default', text: 'قسم الشريعة'},
-                    {id: 'd', type: 'default', text: 'الدعوة وأصول الدين'}
+        // نظام المحتوى الذكي
+        const data = {
+            year1: {
+                title: "دروس السنة الأولى",
+                items: [
+                    {n: "قسم الشريعة", l: "https://t.me/sharia1"},
+                    {n: "قسم الدعوة", l: "https://t.me/dawa1"},
+                    {n: "جدول المحاضرات", l: "https://t.me/table1"}
                 ]
-            }, (id) => {
-                const dept = id === 's' ? 'تخصص: الشريعة الإسلامية' : 'تخصص: الدعوة وأصول الدين';
-                document.getElementById('u-dept').innerText = dept;
-                localStorage.setItem('user
+            },
+            year2: {
+                title: "دروس السنة الثانية",
+                items: [
+                    {n: "قسم الشريعة", l: "https://t.me/sharia2"},
+                    {n: "قسم الدعوة", l: "https://t.me/dawa2"},
+                    {n: "النتائج الفصلية", l: "https://t.me/results2"}
+                ]
+            }
+        };
+
+        function showSub(key) {
+            tg.HapticFeedback.impactOccurred('heavy');
+            const view = data[key];
+            document.getElementById('sub-title').innerText = view.title;
+            const list = document.getElementById('sub-list');
+            list.innerHTML = '';
+            view.items.forEach(i => {
+                list.innerHTML += `<div class="list-item" onclick="openExt('${i.l}')">
+                    <span>${i.n}</span>
+                    <i class="fas fa-external-link-alt" style="color:var(--accent)"></i>
+                </div>`;
+            });
+            document.getElementById('sub-view').style.display = 'block';
+        }
+
+        function closeSub() { document.getElementById('sub-view').style.display = 'none'; }
         
+        function openExt(l) { tg.HapticFeedback.notificationOccurred('success'); tg.openTelegramLink(l); }
+
+        // ميزة السبحة
+        let count = 0;
+        function countTasbih() {
+            count++;
+            document.getElementById('t-count').innerText = count;
+            tg.HapticFeedback.impactOccurred('light');
+        }
+
+        function shareApp() {
+            tg.openLink('https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=بوابة كلية الإمام مالك الفاخرة');
+        }
+
+        function toggleTheme() {
+            const b = document.body;
+            if(b.style.background === 'rgb(248, 250, 252)') {
+                b.style.background = '#0f172a'; b.style.color = '#f8fafc';
+            } else {
+                b.style.background = '#f8fafc'; b.style.color = '#0f172a';
+            }
+        }
+    </script>
+</body>
+</html>
