@@ -55,5 +55,153 @@
             text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             border-bottom: 3px solid transparent; transition: 0.3s;
         }
-        .card:active { border-bottom-color
-                      
+        .card:active { border-bottom-color: var(--gold); transform: translateY(5px); }
+        .card i { font-size: 32px; color: var(--primary); margin-bottom: 12px; display: block; }
+        .card b { font-size: 15px; }
+
+        /* عرض الـ 12 عنصراً */
+        .grid-12 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .item-12 { background: #f1f5f9; padding: 15px; border-radius: 12px; font-size: 13px; font-weight: bold; text-align: center; }
+
+        /* الشريط السفلي */
+        .nav {
+            position: fixed; bottom: 20px; left: 20px; right: 20px;
+            background: var(--dark); padding: 15px; border-radius: 25px;
+            display: flex; justify-content: space-around;
+        }
+        .nav-item { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 20px; cursor: pointer; }
+        .nav-item.active { color: var(--gold); }
+
+        .btn-back {
+            background: var(--primary); color: white; border: none;
+            padding: 12px 25px; border-radius: 15px; width: 100%; font-weight: bold;
+        }
+        .dept-btn {
+            background: var(--primary); color: white; border: none;
+            padding: 10px 20px; border-radius: 10px; margin-top: 15px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dhikr-bar">
+        <div class="dhikr-text">اللهم إني أسألك علماً نافعاً • ربي زدني علماً • سبحان الله وبحمده • لا إله إلا الله • اللهم صل على محمد</div>
+    </div>
+
+    <div class="header">
+        <h1 style="margin:0; font-size: 22px;">بوابة كلية الإمام مالك</h1>
+        <p style="opacity:0.8; font-size:12px;">مرحباً بك في رحاب العلم</p>
+    </div>
+
+    <div id="home-page" class="page active">
+        <div class="student-card">
+            <img id="u-img" src="https://via.placeholder.com/60" class="avatar">
+            <div>
+                <h3 id="u-name" style="margin:0; font-size:17px;">طالب العلم</h3>
+                <span style="font-size:11px; color:var(--gold)" id="u-dept-display">تخصص: لم يحدد بعد</span>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card" onclick="open12('دروس السنة الأولى')">
+                <i class="fas fa-book"></i>
+                <b>السنة الأولى</b>
+            </div>
+            <div class="card" onclick="open12('دروس السنة الثانية')">
+                <i class="fas fa-graduation-cap"></i>
+                <b>السنة الثانية</b>
+            </div>
+            <div class="card" onclick="tg.openTelegramLink('https://t.me/lib')">
+                <i class="fas fa-folder-open"></i>
+                <b>المكتبة</b>
+            </div>
+            <div class="card" onclick="tg.openTelegramLink('https://t.me/news')">
+                <i class="fas fa-bell"></i>
+                <b>الأخبار</b>
+            </div>
+        </div>
+    </div>
+
+    <div id="profile-page" class="page">
+        <div class="card" style="margin-top:20px; border-bottom: none;">
+            <img id="u-img2" src="https://via.placeholder.com/80" style="border-radius:50%; margin-bottom:15px; border: 2px solid var(--gold);">
+            <h2 id="u-name2" style="margin: 0;">اسم الطالب</h2>
+            <p id="u-id" style="color: #888; font-size: 13px;">ID: 00000000</p>
+            <hr style="opacity: 0.1; margin: 20px 0;">
+            <p style="font-weight: bold;">إعدادات الحساب</p>
+            <button class="dept-btn" onclick="setDept()">تحديد التخصص الدراسي ⚙️</button>
+        </div>
+    </div>
+
+    <div id="items-page" class="page">
+        <h2 id="items-title" style="color:var(--primary); text-align: center; margin: 25px 0;"></h2>
+        <div class="grid-12" id="items-container"></div>
+        <button class="btn-back" onclick="showPage('home-page', document.querySelector('.fa-home'))">عودة للرئيسية</button>
+    </div>
+
+    <div class="nav">
+        <i class="fas fa-home nav-item active" onclick="showPage('home-page', this)"></i>
+        <i class="fas fa-user-circle nav-item" onclick="showPage('profile-page', this)"></i>
+        <i class="fas fa-share-alt nav-item" onclick="tg.shareExternal()"></i>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready(); tg.expand();
+        tg.setHeaderColor('#1a2a6c');
+
+        const user = tg.initDataUnsafe?.user;
+        if(user) {
+            const name = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+            document.getElementById('u-name').innerText = name;
+            document.getElementById('u-name2').innerText = name;
+            document.getElementById('u-id').innerText = "ID: " + user.id;
+            if(user.photo_url) {
+                document.getElementById('u-img').src = user.photo_url;
+                document.getElementById('u-img2').src = user.photo_url;
+            }
+        }
+
+        function setDept() {
+            tg.showPopup({
+                title: 'تحديد التخصص',
+                message: 'اختر قسمك الدراسي ليظهر في هويتك:',
+                buttons: [
+                    {id:'s', type:'default', text:'قسم الشريعة'},
+                    {id:'d', type:'default', text:'الدعوة وأصول الدين'}
+                ]
+            }, (id) => {
+                if(!id) return;
+                const d = id === 's' ? 'تخصص: الشريعة' : 'تخصص: الدعوة';
+                localStorage.setItem('dept', d);
+                document.getElementById('u-dept-display').innerText = d;
+                tg.HapticFeedback.notificationOccurred('success');
+            });
+        }
+        
+        if(localStorage.getItem('dept')) {
+            document.getElementById('u-dept-display').innerText = localStorage.getItem('dept');
+        }
+
+        function showPage(id, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(btn) {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            tg.HapticFeedback.impactOccurred('light');
+        }
+
+        function open12(title) {
+            document.getElementById('items-title').innerText = title;
+            const cont = document.getElementById('items-container');
+            cont.innerHTML = '';
+            for(let i=1; i<=12; i++) {
+                cont.innerHTML += `<div class="item-12" onclick="tg.openTelegramLink('https://t.me/channel')">📖 مادة علمية ${i}</div>`;
+            }
+            showPage('items-page');
+        }
+    </script>
+</body>
+</html>
