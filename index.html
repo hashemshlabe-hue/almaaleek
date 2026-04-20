@@ -2,458 +2,288 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>بوابة كلية الإمام مالك</title>
-    <!-- Telegram Web App Script -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Font Awesome for Icons (Optional but recommended for pro look) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
-            /* Primary Theme Colors - Academic Islamic Feel */
-            --primary: #0f5132; /* Deep Emerald Green */
-            --primary-light: #198754;
-            --accent: #d4af37; /* Metallic Gold */
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --text-main: #212529;
-            --text-secondary: #6c757d;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
-            --shadow-md: 0 8px 24px rgba(15, 81, 50, 0.15);
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --primary: #1a2a6c;
+            --gold: #d4af37;
+            --dark: #0f172a;
+            --glass: rgba(255, 255, 255, 0.9);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
-
-        /* Dark Mode Variables (Automatic via Telegram Config) */
-        body.dark-mode {
-            --bg-color: #151515;
-            --card-bg: #222222;
-            --text-main: #e9ecef;
-            --text-secondary: #adb5bd;
-            --primary: #146c43; 
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
-        }
-
-        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f8fafc;
+            margin: 0; padding: 0;
+            color: var(--dark);
             overflow-x: hidden;
-            transition: background-color 0.3s ease;
-            min-height: 100vh;
         }
 
-        /* --- Header & User Card --- */
-        .header-container {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        /* رأس الصفحة الفاخر */
+        .premium-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #2a48b1 100%);
+            padding: 30px 20px 60px;
             color: white;
-            padding: max(env(safe-area-inset-top, 20px) 20px 40px);
-            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-            position: relative;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 20px;
-        }
-
-        .greeting-text {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-
-        .user-card-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 0 10px;
-        }
-
-        .avatar-container {
-            position: relative;
-        }
-
-        .user-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: 3px solid var(--accent);
-            object-fit: cover;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
-            transition: transform 0.3s;
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 18px;
-            height: 18px;
-            background: #ff4757;
-            border: 2px solid var(--card-bg);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 10px;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-
-        .user-details h3 { margin: 0; font-size: 18px; font-weight: 700; }
-        .user-id { 
-            background: rgba(255,255,255,0.15); 
-            padding: 4px 12px; 
-            border-radius: 20px; 
-            font-size: 11px; 
-            display: inline-block;
-            margin-top: 5px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        /* --- Search Bar --- */
-        .search-bar {
-            padding: 0 20px;
-            margin: -20px 0 20px 0;
-            z-index: 10;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 20px 12px 45px;
-            border-radius: 50px;
-            border: none;
-            background: var(--card-bg);
-            color: var(--text-main);
-            box-shadow: var(--shadow-sm);
-            font-size: 14px;
-        }
-        .search-icon {
-            position: absolute;
-            left: 15px;
-            top: 12px;
-            color: var(--text-secondary);
-        }
-
-        /* --- Content Layout --- */
-        .container { padding: 0 20px; padding-bottom: 80px; }
-        
-        .section-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--primary);
-            margin: 25px 0 15px 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        body.dark-mode .section-title { color: var(--accent); }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-        }
-
-        /* --- Professional Cards --- */
-        .main-card {
-            background: var(--card-bg);
-            border-radius: var(--radius-md);
-            padding: 20px;
             text-align: center;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(0,0,0,0.03);
-            cursor: pointer;
+            border-radius: 0 0 40px 40px;
             position: relative;
-            overflow: hidden;
-            transition: var(--transition);
         }
 
-        .main-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-        .main-card:active { transform: scale(0.96); }
-        
-        .card-icon-bg {
-            width: 50px;
-            height: 50px;
-            background: rgba(15, 81, 50, 0.08);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 12px;
-            color: var(--primary);
-            font-size: 20px;
-        }
-        body.dark-mode .card-icon-bg { background: rgba(255,255,255,0.05); color: var(--accent); }
-
-        .main-card h4 { margin: 0; font-size: 14px; font-weight: 600; line-height: 1.4; }
-        
-        /* Decorative line */
-        .main-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 3px;
-            background: linear-gradient(90deg, var(--primary), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .main-card:active::before { opacity: 1; }
-
-        /* --- Animations & View Management --- */
-        .view-section {
-            animation: fadeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .hidden { display: none !important; }
-
-        .back-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-main);
-            font-weight: bold;
-            cursor: pointer;
-            padding: 10px 0;
+        .date-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 11px;
+            display: inline-block;
             margin-bottom: 10px;
         }
 
-        /* --- Share Button --- */
-        .action-btn {
-            background: linear-gradient(45deg, var(--accent), #b8860b);
-            color: #fff;
-            border: none;
-            width: 100%;
-            padding: 16px;
-            border-radius: var(--radius-md);
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 30px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-            cursor: pointer;
+        /* بطاقة الطالب الذكية */
+        .student-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            margin: -40px 20px 20px;
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             display: flex;
-            justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
-        .action-btn:active { transform: scale(0.98); box-shadow: none; }
+
+        .avatar-frame {
+            width: 70px; height: 70px;
+            border-radius: 20px;
+            background: #eee;
+            border: 2px solid var(--gold);
+            overflow: hidden;
+        }
+
+        .student-info h3 { margin: 0; font-size: 18px; color: var(--primary); }
+        .id-badge {
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: bold;
+            display: block;
+            margin-top: 4px;
+        }
+
+        /* شريط الحكمة المتحرك */
+        .wisdom-bar {
+            background: white;
+            margin: 0 20px 20px;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 13px;
+            border-right: 4px solid var(--gold);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .wisdom-text {
+            display: inline-block;
+            animation: scrollText 15s linear infinite;
+        }
+
+        @keyframes scrollText {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+
+        /* شبكة المواد الدراسية */
+        .container { padding: 0 20px 100px; }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 5px 15px;
+        }
+
+        .section-header h2 { font-size: 17px; margin: 0; color: var(--primary); }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .action-card {
+            background: white;
+            padding: 20px 15px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 40px; height: 40px;
+            background: var(--gold);
+            opacity: 0.1;
+            border-radius: 50% 0 0 0;
+        }
+
+        .action-card:active { transform: translateY(5px); box-shadow: none; background: #fafafa; }
+        .action-icon { font-size: 32px; margin-bottom: 10px; display: block; }
+        .action-label { font-weight: 600; font-size: 14px; }
+
+        /* القائمة المنبثقة للتخصصات */
+        .modal-view {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 100;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .btn-back {
+            background: #eee;
+            padding: 10px 20px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        /* شريط التنقل السفلي */
+        .nav-bar {
+            position: fixed;
+            bottom: 20px; left: 20px; right: 20px;
+            background: var(--dark);
+            padding: 15px;
+            border-radius: 25px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .nav-item { color: rgba(255,255,255,0.6); text-align: center; font-size: 11px; text-decoration: none; }
+        .nav-item.active { color: var(--gold); }
+        .nav-icon { display: block; font-size: 20px; margin-bottom: 3px; }
 
     </style>
 </head>
 <body>
 
-    <!-- Header Section -->
-    <div class="header-container">
-        <div style="padding: 0 20px;">
-            <div id="greeting" class="greeting-text">مرحباً بك</div>
-            <div class="user-card-wrapper">
-                <div class="avatar-container">
-                    <img id="user-pic" class="user-avatar" src="https://ui-avatars.com/api/?name=User&background=random" alt="User">
-                    <div class="notification-badge" onclick="tg.showAlert('لا توجد إشعارات جديدة')">
-                        <i class="fas fa-bell" style="font-size: 10px;"></i>
-                    </div>
-                </div>
-                <div class="user-details">
-                    <h3 id="user-name">طالب العلم</h3>
-                    <span class="user-id">رقم الطالب: <span id="user-id-val">...</span></span>
-                </div>
+    <div class="premium-header">
+        <div class="date-badge" id="current-date">جاري التحميل...</div>
+        <h1 style="margin: 0; font-size: 22px;">بوابة كلية الإمام مالك</h1>
+        <p style="opacity: 0.8; font-size: 13px;">مرحباً بك في رحاب العلم</p>
+    </div>
+
+    <div class="student-card">
+        <div class="avatar-frame">
+            <img id="u-pic" src="https://via.placeholder.com/70" style="width:100%; height:100%; object-fit: cover;">
+        </div>
+        <div class="student-info">
+            <h3 id="u-name">زائر البوابة</h3>
+            <span class="id-badge">ID: <span id="u-id">00000000</span></span>
+        </div>
+    </div>
+
+    <div class="wisdom-bar">
+        <div class="wisdom-text">
+            قال الإمام مالك: "لا يُؤخذ العلم عن أربعة: سَفِيهٍ مُعْلِنٍ بِالسَّفَهِ، وصاحبِ هَوًى يدعو إليه، وكذَّابٍ في حديث الناس، ورجلٍ له فضلٌ وعبادةٌ لا يَعرف ما يُحدث به." 
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section-header">
+            <h2>الأقسام الأكاديمية</h2>
+        </div>
+        <div class="action-grid">
+            <div class="action-card" onclick="openYear(1)">
+                <span class="action-icon">📖</span>
+                <div class="action-label">السنة الأولى</div>
+            </div>
+            <div class="action-card" onclick="openYear(2)">
+                <span class="action-icon">📚</span>
+                <div class="action-label">السنة الثانية</div>
+            </div>
+            <div class="action-card" onclick="openLink('https://t.me/your_library')">
+                <span class="action-icon">📂</span>
+                <div class="action-label">المكتبة</div>
+            </div>
+            <div class="action-card" onclick="openLink('https://t.me/your_ads')">
+                <span class="action-icon">🔔</span>
+                <div class="action-label">الإعلانات</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <button onclick="tg.shareExternal()" style="width:100%; padding:18px; border-radius:20px; border:none; background:var(--primary); color:white; font-weight:bold; font-size:16px; box-shadow: 0 10px 20px rgba(26, 42, 108, 0.2);">
+                📤 مشاركة البوابة مع الطلاب
+            </button>
+        </div>
+    </div>
+
+    <div id="year-modal" class="modal-view">
+        <div class="btn-back" onclick="closeModal()">🔙 العودة</div>
+        <h2 id="modal-title" style="color:var(--primary)"></h2>
+        <div class="action-grid">
+            <div class="action-card" id="sharia-btn">
+                <span class="action-icon">⚖️</span>
+                <div class="action-label">قسم الشريعة</div>
+            </div>
+            <div class="action-card" id="dawa-btn">
+                <span class="action-icon">🕌</span>
+                <div class="action-label">الدعوة وأصول الدين</div>
             </div>
         </div>
     </div>
 
-    <!-- Search Placeholder -->
-    <div class="search-bar">
-        <input type="text" class="search-input" placeholder="ابحث عن قسم أو مادة..." disabled>
-        <i class="fas fa-search search-icon"></i>
-    </div>
-
-    <!-- Main Home View -->
-    <div id="home-view" class="container view-section">
-        <div class="section-title"><i class="fas fa-calendar-alt"></i> السنوات الدراسية</div>
-        <div class="grid">
-            <div class="main-card" onclick="navTo('year1')">
-                <div class="card-icon-bg"><i class="fas fa-layer-group"></i></div>
-                <h4>السنة الأولى<br><span style="font-size:11px; color:var(--text-secondary); font-weight:400;">المقدمات والعلوم الأساسية</span></h4>
-            </div>
-            <div class="main-card" onclick="navTo('year2')">
-                <div class="card-icon-bg"><i class="fas fa-shapes"></i></div>
-                <h4>السنة الثانية<br><span style="font-size:11px; color:var(--text-secondary); font-weight:400;">تخصصات متقدمة</span></h4>
-            </div>
-            <div class="main-card" onclick="openLink('https://t.me/college_helpdesk')">
-                <div class="card-icon-bg" style="color: #ff4757;"><i class="fas fa-life-ring"></i></div>
-                <h4>الدعم الفني</h4>
-            </div>
-            <div class="main-card" onclick="openLink('https://t.me/imam_malik_news')">
-                <div class="card-icon-bg" style="color: #2ed573;"><i class="fas fa-newspaper"></i></div>
-                <h4>أخبار الكلية</h4>
-            </div>
-        </div>
-
-        <div class="section-title"><i class="fas fa-star"></i> موارد مهمة</div>
-        <div class="grid">
-            <div class="main-card" onclick="openLink('https://t.me/library_channel')">
-                <div class="card-icon-bg" style="color: #3742fa;"><i class="fas fa-book-open"></i></div>
-                <h4>المكتبة الرقمية</h4>
-            </div>
-            <div class="main-card" onclick="openLink('https://t.me/fatwa_channel')">
-                <div class="card-icon-bg" style="color: #ffa502;"><i class="fas fa-quran"></i></div>
-                <h4>قسم الفتوى</h4>
-            </div>
-        </div>
-    </div>
-
-    <!-- Dynamic Year Views (Hidden by default) -->
-    <div id="year1-view" class="container view-section hidden">
-        <div class="back-header" onclick="navTo('home')">
-            <i class="fas fa-arrow-right"></i>
-            <span>عودة إلى القائمة الرئيسية</span>
-        </div>
-        <div class="section-title">الفرع العلمي الأول</div>
-        <div class="grid">
-            <div class="main-card" onclick="openLink('https://t.me/sharia_first')">
-                <div class="card-icon-bg"><i class="fas fa-balance-scale"></i></div>
-                <h4>الشريعة والفقه</h4>
-            </div>
-            <div class="main-card" onclick="openLink('https://t.me/lughah_first')">
-                <div class="card-icon-bg"><i class="fas fa-pen-nib"></i></div>
-                <h4>اللغة العربية</h4>
-            </div>
-            <div class="main-card" onclick="openLink('https://t.me/tariqah_first')">
-                <div class="card-icon-bg"><i class="fas fa-mosque"></i></div>
-                <h4>التاريخ والحديث</h4>
-            </div>
-        </div>
-    </div>
-
-    <div id="year2-view" class="container view-section hidden">
-        <div class="back-header" onclick="navTo('home')">
-            <i class="fas fa-arrow-right"></i>
-            <span>عودة إلى القائمة الرئيسية</span>
-        </div>
-        <div class="section-title">الفرع العلمي الثاني</div>
-        <div class="grid">
-            <div class="main-card" onclick="openLink('https://t.me/kalam_adv')">
-                <div class="card-icon-bg"><i class="fas fa-brain"></i></div>
-                <h4>علم الكلام والأصول</h4>
-            </div>
-            <div class="main-card" onclick="openLink('https://t.me/dawa_adv')">
-                <div class="card-icon-bg"><i class="fas fa-bullhorn"></i></div>
-                <h4>الدعوة والمنهج</h4>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bottom Action Button -->
-    <div class="container" style="padding-left: 20px; padding-right: 20px;">
-        <button onclick="shareApp()" class="action-btn">
-            <i class="fab fa-telegram-plane"></i> دعوة زميل للجامعة
-        </button>
+    <div class="nav-bar">
+        <a href="#" class="nav-item active"><span class="nav-icon">🏠</span>الرئيسية</a>
+        <a href="#" onclick="openLink('https://t.me/your_support')" class="nav-item"><span class="nav-icon">🎧</span>الدعم</a>
+        <a href="#" onclick="openLink('https://t.me/your_daily')" class="nav-item"><span class="nav-icon">✨</span>الورد</a>
     </div>
 
     <script>
-        // --- Initialization & Configuration ---
         const tg = window.Telegram.WebApp;
-        
-        // Set up Telegram appearance variables manually or rely on system preference
         tg.ready();
         tg.expand();
+        tg.setHeaderColor('#1a2a6c');
 
-        // Initialize User Data
-        function initUserData() {
-            const user = tg.initDataUnsafe?.user;
-            
-            // 1. Dynamic Greeting based on time
-            const hour = new Date().getHours();
-            let greetingText = "مرحباً";
-            if (hour < 12) greetingText = "صباح الخير";
-            else if (hour < 18) greetingText = "مساء الخير";
-            else greetingText = "مساء النور";
-            document.getElementById('greeting').innerText = `${greetingText}، ${user?.first_name || 'الزميل'}`;
-
-            // 2. Set Avatar & Name
-            if (user?.photo_url) {
-                document.getElementById('user-pic').src = user.photo_url;
-            } else {
-                // Fallback using initials
-                document.getElementById('user-pic').src = `https://ui-avatars.com/api/?name=${user?.first_name||'U'}&background=fff&color=0f5132&size=128`;
-            }
-            
-            document.getElementById('user-name').innerText = user?.first_name + ' ' + (user?.last_name || '');
-            document.getElementById('user-id-val').innerText = user?.id || '00000';
-
-            // 3. Apply Theme Color from Telegram
-            if(tg.themeParams.bg_color) {
-               // You could logic here to switch themes based on bg_color brightness
-            }
+        // جلب بيانات الطالب
+        const user = tg.initDataUnsafe?.user;
+        if (user) {
+            document.getElementById('u-name').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+            document.getElementById('u-id').innerText = user.id;
+            if (user.photo_url) document.getElementById('u-pic').src = user.photo_url;
         }
 
-        // --- Navigation Logic ---
-        function navTo(targetView) {
-            // Trigger Haptic Feedback (Subtle click feel)
-            tg.HapticFeedback.impactOccurred('light');
+        // عرض التاريخ
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('ar-SA', options);
 
-            // Hide all views first
-            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+        function openYear(y) {
+            document.getElementById('modal-title').innerText = (y === 1 ? 'السنة الأولى' : 'السنة الثانية');
+            document.getElementById('sharia-btn').onclick = () => openLink(y === 1 ? 'https://t.me/sharia1' : 'https://t.me/sharia2');
+            document.getElementById('dawa-btn').onclick = () => openLink(y === 1 ? 'https://t.me/dawa1' : 'https://t.me/dawa2');
+            document.getElementById('year-modal').style.display = 'block';
+        }
 
-            // Show target view
-            if (targetView === 'home') {
-                document.getElementById('home-view').classList.remove('hidden');
-                window.scrollTo({top: 0, behavior: 'smooth'});
-            } else {
-                const viewId = targetView + '-view';
-                const targetEl = document.getElementById(viewId);
-                if (targetEl) {
-                    targetEl.classList.remove('hidden');
-                    // Scroll to top smoothly
-                    setTimeout(() => window.scrollTo({top: 0, behavior: 'smooth'}), 10);
-                }
-            }
+        function closeModal() {
+            document.getElementById('year-modal').style.display = 'none';
         }
 
         function openLink(url) {
-            tg.HapticFeedback.selectionChanged();
-            if(url.startsWith('http')) {
-                tg.openTelegramLink(url);
-            }
+            tg.openTelegramLink(url);
         }
-
-        function shareApp() {
-            const text = "انضم إلينا في كلية الإمام مالك عبر هذه البوابة الإلكترونية الحديثة.";
-            const url = tg.initDataUnsafe.start_param ? 
-                `https://t.me/${tg.initDataUnsafe.start_param.split('=')[0]}` : 
-                window.location.href;
-            
-            tg.showPopup({
-                title: 'شارك البوابة',
-                message: 'اختر طريقة المشاركة:',
-                buttons: [
-                    {id: 'tg_share', type: 'default', text: 'مشاركة عبر تلجرام'},
-                    {id: 'copy', type: 'destructive', text: 'نسخ الرابط'}
-                ]
-            }, (buttonId) => {
-                if(buttonId === 'tg_share') {
-                    tg.switchInlineQuery(text); // Or openLink with share URL
-                    tg.openShareDialog(url + '?invite=true', ['text/html']);
-                } else if (buttonId === 'copy') {
-                    navigator.clipboard.writeText(url);
-                    tg.showAlert('تم نسخ الرابط بنجاح!');
-                }
-            });
-        }
-
-        // Run Init
-        initUserData();
-
     </script>
 </body>
-    </html>
+</html>
