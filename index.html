@@ -3,286 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بوابة كلية الإمام مالك</title>
+    <title>بوابة السكينة الرقمية</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #1a2a6c;
-            --gold: #d4af37;
-            --dark: #0f172a;
-            --glass: rgba(255, 255, 255, 0.9);
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --bg: #f7f9fb;
+            --soft-green: #e9f5f2;
+            --mint: #5cb8a6;
+            --gold-pale: #d4af37;
+            --text-dark: #2c3e50;
+            --shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #f8fafc;
-            margin: 0; padding: 0;
-            color: var(--dark);
-            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: var(--bg); color: var(--text-dark);
+            margin: 0; padding: 0; overflow-x: hidden;
         }
 
-        /* رأس الصفحة الفاخر */
-        .premium-header {
-            background: linear-gradient(135deg, var(--primary) 0%, #2a48b1 100%);
-            padding: 30px 20px 60px;
-            color: white;
-            text-align: center;
-            border-radius: 0 0 40px 40px;
-            position: relative;
+        /* شريط الأذكار النبوية */
+        .dhikr-stream {
+            background: white; color: var(--mint); padding: 10px 0;
+            font-size: 13px; font-weight: bold; overflow: hidden;
+            border-bottom: 1px solid var(--soft-green);
+        }
+        .dhikr-track {
+            display: inline-block; white-space: nowrap;
+            animation: scrollDhikr 30s linear infinite;
+        }
+        @keyframes scrollDhikr { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+
+        /* الأقسام والصفحات */
+        .page { display: none; padding: 20px 20px 100px; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* بطاقة البروفايل المتقدمة */
+        .profile-card {
+            background: white; border-radius: 30px; padding: 30px;
+            text-align: center; box-shadow: var(--shadow); border: 1px solid #fff;
+        }
+        .user-img {
+            width: 90px; height: 90px; border-radius: 35px;
+            border: 3px solid var(--soft-green); margin-bottom: 15px;
+        }
+        .dept-tag {
+            background: var(--soft-green); color: var(--mint);
+            padding: 5px 15px; border-radius: 15px; font-size: 12px; font-weight: bold;
         }
 
-        .date-badge {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 11px;
-            display: inline-block;
-            margin-bottom: 10px;
+        /* شبكة الـ 12 عنصراً */
+        .grid-12 {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px;
+        }
+        .unit-box {
+            background: white; padding: 15px; border-radius: 20px;
+            box-shadow: var(--shadow); border-right: 4px solid var(--mint);
+            font-size: 13px; display: flex; align-items: center; gap: 10px;
         }
 
-        /* بطاقة الطالب الذكية */
-        .student-card {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            margin: -40px 20px 20px;
-            padding: 20px;
-            border-radius: 25px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        /* أزرار الصفحة الرئيسية */
+        .main-card {
+            background: white; border-radius: 25px; padding: 25px;
+            margin-bottom: 15px; box-shadow: var(--shadow);
+            display: flex; align-items: center; justify-content: space-between;
         }
-
-        .avatar-frame {
-            width: 70px; height: 70px;
-            border-radius: 20px;
-            background: #eee;
-            border: 2px solid var(--gold);
-            overflow: hidden;
-        }
-
-        .student-info h3 { margin: 0; font-size: 18px; color: var(--primary); }
-        .id-badge {
-            color: var(--gold);
-            font-size: 12px;
-            font-weight: bold;
-            display: block;
-            margin-top: 4px;
-        }
-
-        /* شريط الحكمة المتحرك */
-        .wisdom-bar {
-            background: white;
-            margin: 0 20px 20px;
-            padding: 10px;
-            border-radius: 12px;
-            font-size: 13px;
-            border-right: 4px solid var(--gold);
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .wisdom-text {
-            display: inline-block;
-            animation: scrollText 15s linear infinite;
-        }
-
-        @keyframes scrollText {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(100%); }
-        }
-
-        /* شبكة المواد الدراسية */
-        .container { padding: 0 20px 100px; }
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 5px 15px;
-        }
-
-        .section-header h2 { font-size: 17px; margin: 0; color: var(--primary); }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .action-card {
-            background: white;
-            padding: 20px 15px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .action-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0; right: 0;
-            width: 40px; height: 40px;
-            background: var(--gold);
-            opacity: 0.1;
-            border-radius: 50% 0 0 0;
-        }
-
-        .action-card:active { transform: translateY(5px); box-shadow: none; background: #fafafa; }
-        .action-icon { font-size: 32px; margin-bottom: 10px; display: block; }
-        .action-label { font-weight: 600; font-size: 14px; }
-
-        /* القائمة المنبثقة للتخصصات */
-        .modal-view {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg);
-            z-index: 100;
-            padding: 20px;
-            box-sizing: border-box;
-            animation: slideUp 0.4s ease-out;
-        }
-
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-        .btn-back {
-            background: #eee;
-            padding: 10px 20px;
-            border-radius: 12px;
-            display: inline-block;
-            margin-bottom: 20px;
-            font-size: 14px;
+        .icon-circle {
+            width: 50px; height: 50px; background: var(--soft-green);
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; color: var(--mint); font-size: 20px;
         }
 
         /* شريط التنقل السفلي */
-        .nav-bar {
-            position: fixed;
-            bottom: 20px; left: 20px; right: 20px;
-            background: var(--dark);
-            padding: 15px;
-            border-radius: 25px;
-            display: flex;
-            justify-content: space-around;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        .nav-bottom {
+            position: fixed; bottom: 20px; left: 20px; right: 20px;
+            background: white; height: 70px; border-radius: 25px;
+            display: flex; justify-content: space-around; align-items: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 1000;
         }
+        .nav-btn { color: #bdc3c7; font-size: 20px; transition: 0.3s; }
+        .nav-btn.active { color: var(--mint); transform: translateY(-5px); }
 
-        .nav-item { color: rgba(255,255,255,0.6); text-align: center; font-size: 11px; text-decoration: none; }
-        .nav-item.active { color: var(--gold); }
-        .nav-icon { display: block; font-size: 20px; margin-bottom: 3px; }
-
+        .btn-action {
+            background: var(--mint); color: white; border: none;
+            padding: 12px 25px; border-radius: 15px; font-weight: bold; margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="premium-header">
-        <div class="date-badge" id="current-date">جاري التحميل...</div>
-        <h1 style="margin: 0; font-size: 22px;">بوابة كلية الإمام مالك</h1>
-        <p style="opacity: 0.8; font-size: 13px;">مرحباً بك في رحاب العلم</p>
-    </div>
-
-    <div class="student-card">
-        <div class="avatar-frame">
-            <img id="u-pic" src="https://via.placeholder.com/70" style="width:100%; height:100%; object-fit: cover;">
-        </div>
-        <div class="student-info">
-            <h3 id="u-name">زائر البوابة</h3>
-            <span class="id-badge">ID: <span id="u-id">00000000</span></span>
+    <div class="dhikr-stream">
+        <div class="dhikr-track">
+             🌸 سبحان الله وبحمده، سبحان الله العظيم • اللهم صل وسلم على نبينا محمد • ربي زدني علماً • استغفر الله العظيم واتوب إليه 🌸
         </div>
     </div>
 
-    <div class="wisdom-bar">
-        <div class="wisdom-text">
-            قال الإمام مالك: "لا يُؤخذ العلم عن أربعة: سَفِيهٍ مُعْلِنٍ بِالسَّفَهِ، وصاحبِ هَوًى يدعو إليه، وكذَّابٍ في حديث الناس، ورجلٍ له فضلٌ وعبادةٌ لا يَعرف ما يُحدث به." 
+    <div id="home" class="page active">
+        <h2 style="margin-bottom: 5px;">أهلاً بك،</h2>
+        <p style="color: #888; font-size: 14px; margin-top: 0;">في بوابة كلية الإمام مالك الرقمية</p>
+        
+        <div class="main-card" onclick="openUnits('السنة الأولى')">
+            <div style="display:flex; align-items:center; gap:15px;">
+                <div class="icon-circle"><i class="fas fa-book"></i></div>
+                <div><b>السنة الأولى</b><br><small style="color:#999">👥 5,230 طالب</small></div>
+            </div>
+            <i class="fas fa-chevron-left" style="color:#eee"></i>
+        </div>
+
+        <div class="main-card" onclick="openUnits('السنة الثانية')">
+            <div style="display:flex; align-items:center; gap:15px;">
+                <div class="icon-circle"><i class="fas fa-graduation-cap"></i></div>
+                <div><b>السنة الثانية</b><br><small style="color:#999">👥 4,890 طالب</small></div>
+            </div>
+            <i class="fas fa-chevron-left" style="color:#eee"></i>
+        </div>
+
+        <div class="main-card" onclick="tg.openTelegramLink('https://t.me/library')">
+            <div style="display:flex; align-items:center; gap:15px;">
+                <div class="icon-circle"><i class="fas fa-vault"></i></div>
+                <div><b>المكتبة الشاملة</b><br><small style="color:#999">📚 850 مصدر</small></div>
+            </div>
+            <i class="fas fa-chevron-left" style="color:#eee"></i>
         </div>
     </div>
 
-    <div class="container">
-        <div class="section-header">
-            <h2>الأقسام الأكاديمية</h2>
-        </div>
-        <div class="action-grid">
-            <div class="action-card" onclick="openYear(1)">
-                <span class="action-icon">📖</span>
-                <div class="action-label">السنة الأولى</div>
+    <div id="profile" class="page">
+        <div class="profile-card">
+            <img id="u-pic" src="https://via.placeholder.com/90" class="user-img">
+            <h3 id="u-name" style="margin:0">طالب العلم</h3>
+            <p id="u-id" style="color:#bdc3c7; font-size: 12px; margin: 5px 0 15px;">ID: 00000000</p>
+            <span class="dept-tag" id="display-dept">لم يتم تحديد التخصص</span>
+            
+            <div style="margin-top: 30px; display: flex; justify-content: space-around;">
+                <div><b style="color:var(--mint)">12,450</b><br><small>زوار البوابة</small></div>
+                <div><b style="color:var(--mint)">نشط</b><br><small>حالة الحساب</small></div>
             </div>
-            <div class="action-card" onclick="openYear(2)">
-                <span class="action-icon">📚</span>
-                <div class="action-label">السنة الثانية</div>
-            </div>
-            <div class="action-card" onclick="openLink('https://t.me/your_library')">
-                <span class="action-icon">📂</span>
-                <div class="action-label">المكتبة</div>
-            </div>
-            <div class="action-card" onclick="openLink('https://t.me/your_ads')">
-                <span class="action-icon">🔔</span>
-                <div class="action-label">الإعلانات</div>
-            </div>
-        </div>
 
-        <div style="margin-top: 30px;">
-            <button onclick="tg.shareExternal()" style="width:100%; padding:18px; border-radius:20px; border:none; background:var(--primary); color:white; font-weight:bold; font-size:16px; box-shadow: 0 10px 20px rgba(26, 42, 108, 0.2);">
-                📤 مشاركة البوابة مع الطلاب
-            </button>
+            <button class="btn-action" onclick="chooseDept()">تغيير التخصص ⚙️</button>
         </div>
     </div>
 
-    <div id="year-modal" class="modal-view">
-        <div class="btn-back" onclick="closeModal()">🔙 العودة</div>
-        <h2 id="modal-title" style="color:var(--primary)"></h2>
-        <div class="action-grid">
-            <div class="action-card" id="sharia-btn">
-                <span class="action-icon">⚖️</span>
-                <div class="action-label">قسم الشريعة</div>
-            </div>
-            <div class="action-card" id="dawa-btn">
-                <span class="action-icon">🕌</span>
-                <div class="action-label">الدعوة وأصول الدين</div>
-            </div>
+    <div id="units" class="page">
+        <div onclick="showPage('home')" style="color: var(--mint); margin-bottom: 20px; font-weight: bold;">
+            <i class="fas fa-arrow-right"></i> العودة للرئيسية
         </div>
+        <h2 id="unit-title"></h2>
+        <div class="grid-12" id="unit-content"></div>
     </div>
 
-    <div class="nav-bar">
-        <a href="#" class="nav-item active"><span class="nav-icon">🏠</span>الرئيسية</a>
-        <a href="#" onclick="openLink('https://t.me/your_support')" class="nav-item"><span class="nav-icon">🎧</span>الدعم</a>
-        <a href="#" onclick="openLink('https://t.me/your_daily')" class="nav-item"><span class="nav-icon">✨</span>الورد</a>
+    <div class="nav-bottom">
+        <div class="nav-btn active" onclick="showPage('home', this)"><i class="fas fa-house"></i></div>
+        <div class="nav-btn" onclick="tg.openTelegramLink('https://t.me/support')"><i class="fas fa-comments"></i></div>
+        <div class="nav-btn" onclick="showPage('profile', this)"><i class="fas fa-user-circle"></i></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-        tg.setHeaderColor('#1a2a6c');
+        tg.ready(); tg.expand();
+        tg.setHeaderColor('#f7f9fb');
 
-        // جلب بيانات الطالب
+        // تحميل بيانات المستخدم
         const user = tg.initDataUnsafe?.user;
-        if (user) {
+        if(user) {
             document.getElementById('u-name').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-            document.getElementById('u-id').innerText = user.id;
-            if (user.photo_url) document.getElementById('u-pic').src = user.photo_url;
+            document.getElementById('u-id').innerText = "ID: " + user.id;
+            if(user.photo_url) document.getElementById('u-pic').src = user.photo_url;
         }
 
-        // عرض التاريخ
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('current-date').innerText = new Date().toLocaleDateString('ar-SA', options);
-
-        function openYear(y) {
-            document.getElementById('modal-title').innerText = (y === 1 ? 'السنة الأولى' : 'السنة الثانية');
-            document.getElementById('sharia-btn').onclick = () => openLink(y === 1 ? 'https://t.me/sharia1' : 'https://t.me/sharia2');
-            document.getElementById('dawa-btn').onclick = () => openLink(y === 1 ? 'https://t.me/dawa1' : 'https://t.me/dawa2');
-            document.getElementById('year-modal').style.display = 'block';
+        // حفظ واسترجاع القسم
+        if(localStorage.getItem('myDept')) {
+            document.getElementById('display-dept').innerText = localStorage.getItem('myDept');
         }
 
-        function closeModal() {
-            document.getElementById('year-modal').style.display = 'none';
+        function chooseDept() {
+            tg.showPopup({
+                title: 'تخصيص القسم الدراسي',
+                message: 'اختر قسمك ليظهر في ملفك الشخصي:',
+                buttons: [
+                    {id: 's', type: 'default', text: 'قسم الشريعة'},
+                    {id: 'd', type: 'default', text: 'الدعوة وأصول الدين'}
+                ]
+            }, (id) => {
+                const dept = (id === 's') ? "قسم الشريعة" : "قسم الدعوة وأصول الدين";
+                localStorage.setItem('myDept', dept);
+                document.getElementById('display-dept').innerText = dept;
+                tg.HapticFeedback.notificationOccurred('success');
+            });
         }
 
-        function openLink(url) {
-            tg.openTelegramLink(url);
+        // التنقل بين الصفحات
+        function showPage(pageId, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            tg.HapticFeedback.impactOccurred('light');
+        }
+
+        // فتح الـ 12 عنصراً
+        function openUnits(title) {
+            document.getElementById('unit-title').innerText = title;
+            const container = document.getElementById('unit-content');
+            container.innerHTML = '';
+            for(let i=1; i<=12; i++) {
+                container.innerHTML += `
+                    <div class="unit-box" onclick="tg.openTelegramLink('https://t.me/channel')">
+                        <i class="fas fa-file-lines" style="color:var(--mint)"></i>
+                        مادة رقم ${i}
+                    </div>
+                `;
+            }
+            showPage('units');
         }
     </script>
 </body>
