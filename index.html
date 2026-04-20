@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بوابة كلية الإمام مالك</title>
+    <title>بوابة النخبة V5.5</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -17,132 +17,149 @@
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
             background: var(--bg); margin: 0; padding: 0; color: var(--dark);
+            user-select: none;
         }
 
-        /* شريط الأذكار المتحرك */
-        .dhikr-bar {
-            background: var(--primary); color: white; padding: 8px 0;
-            font-size: 13px; overflow: hidden; white-space: nowrap;
+        /* شريط الأذكار والتفاعل */
+        .top-glow {
+            background: var(--primary); color: white; padding: 10px 0;
+            font-size: 12px; overflow: hidden; white-space: nowrap;
+            border-bottom: 2px solid var(--gold); box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .dhikr-text {
-            display: inline-block; padding-left: 100%;
-            animation: scroll 20s linear infinite;
-        }
+        .dhikr-track { display: inline-block; padding-left: 100%; animation: scroll 30s linear infinite; }
         @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(100%); } }
 
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, #2a48b1 100%);
-            padding: 30px 20px 60px; color: white; text-align: center;
-            border-radius: 0 0 40px 40px;
+            padding: 35px 20px 65px; color: white; text-align: center; border-radius: 0 0 45px 45px;
         }
 
-        .student-card {
-            background: white; margin: -40px 20px 20px; padding: 20px;
-            border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            display: flex; align-items: center; gap: 15px;
+        /* إحصائيات الإنجاز (ميزة جديدة) */
+        .achievement-bar {
+            background: white; margin: -25px 20px 20px; padding: 15px;
+            border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            display: flex; justify-content: space-around; align-items: center;
         }
+        .stat-item { text-align: center; }
+        .stat-item b { color: var(--primary); display: block; font-size: 16px; }
+        .stat-item span { font-size: 10px; color: #888; }
 
-        .avatar { width: 60px; height: 60px; border-radius: 15px; border: 2px solid var(--gold); }
-
-        /* الصفحات */
-        .page { display: none; padding: 0 20px 100px; }
+        .page { display: none; padding: 0 20px 110px; animation: slideUp 0.4s ease-out; }
         .page.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         
         .card {
-            background: white; padding: 25px 15px; border-radius: 20px;
-            text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            border-bottom: 3px solid transparent; transition: 0.3s;
+            background: white; padding: 22px 15px; border-radius: 25px;
+            text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.03); 
+            border: 1px solid rgba(0,0,0,0.02); transition: 0.3s;
         }
-        .card:active { border-bottom-color: var(--gold); transform: translateY(5px); }
+        .card:active { transform: scale(0.92); background: #f9fafb; border-color: var(--gold); }
         .card i { font-size: 32px; color: var(--primary); margin-bottom: 12px; display: block; }
-        .card b { font-size: 15px; }
 
-        /* عرض الـ 12 عنصراً */
-        .grid-12 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .item-12 { background: #f1f5f9; padding: 15px; border-radius: 12px; font-size: 13px; font-weight: bold; text-align: center; }
+        /* نظام التحدي اليومي */
+        .daily-challenge {
+            background: linear-gradient(45deg, #fff, #fff9e6);
+            border: 1px solid var(--gold); padding: 15px; border-radius: 20px;
+            margin-top: 20px; position: relative; overflow: hidden;
+        }
 
-        /* الشريط السفلي */
+        /* واجهة الـ 12 عنصر المتطورة */
+        .item-12 {
+            background: white; padding: 18px 10px; border-radius: 18px;
+            font-weight: bold; text-align: center; font-size: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            border-bottom: 3px solid var(--gold); display: flex; flex-direction: column; gap: 8px;
+        }
+
         .nav {
-            position: fixed; bottom: 20px; left: 20px; right: 20px;
-            background: var(--dark); padding: 15px; border-radius: 25px;
-            display: flex; justify-content: space-around;
+            position: fixed; bottom: 25px; left: 25px; right: 25px;
+            background: var(--dark); padding: 18px; border-radius: 30px;
+            display: flex; justify-content: space-around; align-items: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); z-index: 1000;
         }
-        .nav-item { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 20px; cursor: pointer; }
-        .nav-item.active { color: var(--gold); }
+        .nav-item { color: rgba(255,255,255,0.4); font-size: 22px; cursor: pointer; transition: 0.3s; }
+        .nav-item.active { color: var(--gold); transform: scale(1.2); }
 
-        .btn-back {
+        .btn-main {
             background: var(--primary); color: white; border: none;
-            padding: 12px 25px; border-radius: 15px; width: 100%; font-weight: bold;
-        }
-        .dept-btn {
-            background: var(--primary); color: white; border: none;
-            padding: 10px 20px; border-radius: 10px; margin-top: 15px; cursor: pointer;
+            padding: 15px; border-radius: 18px; width: 100%; font-weight: bold;
+            box-shadow: 0 8px 20px rgba(26, 42, 108, 0.2);
         }
     </style>
 </head>
 <body>
 
-    <div class="dhikr-bar">
-        <div class="dhikr-text">اللهم إني أسألك علماً نافعاً • ربي زدني علماً • سبحان الله وبحمده • لا إله إلا الله • اللهم صل على محمد</div>
+    <div class="top-glow">
+        <div class="dhikr-track">💎 "من سلك طريقاً يلتمس فيه علماً سهل الله له به طريقاً إلى الجنة" • سبحان الله وبحمده • اللهم علمنا ما ينفعنا • استغفر الله 💎</div>
     </div>
 
     <div class="header">
-        <h1 style="margin:0; font-size: 22px;">بوابة كلية الإمام مالك</h1>
-        <p style="opacity:0.8; font-size:12px;">مرحباً بك في رحاب العلم</p>
+        <h1 style="margin:0; font-size: 24px; letter-spacing: 1px;">بوابة النخبة</h1>
+        <p style="opacity:0.8; font-size:12px; margin-top:5px;">الإصدار الإبداعي الخامس المطور</p>
+    </div>
+
+    <div class="achievement-bar">
+        <div class="stat-item">
+            <b id="time-count">0</b>
+            <span>دقائق التعلم</span>
+        </div>
+        <div style="width:1px; height:30px; background:#eee;"></div>
+        <div class="stat-item">
+            <b id="badge-count">مبتدئ</b>
+            <span>مستوى الهمة</span>
+        </div>
     </div>
 
     <div id="home-page" class="page active">
-        <div class="student-card">
-            <img id="u-img" src="https://via.placeholder.com/60" class="avatar">
-            <div>
-                <h3 id="u-name" style="margin:0; font-size:17px;">طالب العلم</h3>
-                <span style="font-size:11px; color:var(--gold)" id="u-dept-display">تخصص: لم يحدد بعد</span>
-            </div>
+        <div class="grid">
+            <div class="card" onclick="open12('مواد السنة الأولى')"><i class="fas fa-book-open"></i><b>السنة الأولى</b></div>
+            <div class="card" onclick="open12('مواد السنة الثانية')"><i class="fas fa-award"></i><b>السنة الثانية</b></div>
+            <div class="card" onclick="showPage('notes-page', document.querySelector('.fa-lightbulb'))"><i class="fas fa-lightbulb"></i><b>خزانة الفوائد</b></div>
+            <div class="card" onclick="tg.openTelegramLink('https://t.me/news')"><i class="fas fa-satellite-dish"></i><b>آخر الأخبار</b></div>
         </div>
 
-        <div class="grid">
-            <div class="card" onclick="open12('دروس السنة الأولى')">
-                <i class="fas fa-book"></i>
-                <b>السنة الأولى</b>
+        <div class="daily-challenge">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:bold; color:var(--primary); font-size:13px;">💡 تحدي اليوم الأكاديمي</span>
+                <i class="fas fa-fire" style="color:var(--gold)"></i>
             </div>
-            <div class="card" onclick="open12('دروس السنة الثانية')">
-                <i class="fas fa-graduation-cap"></i>
-                <b>السنة الثانية</b>
-            </div>
-            <div class="card" onclick="tg.openTelegramLink('https://t.me/lib')">
-                <i class="fas fa-folder-open"></i>
-                <b>المكتبة</b>
-            </div>
-            <div class="card" onclick="tg.openTelegramLink('https://t.me/news')">
-                <i class="fas fa-bell"></i>
-                <b>الأخبار</b>
-            </div>
+            <p style="font-size:12px; margin:10px 0;">ما هو الكتاب الذي يعتبر "أصل" المذهب المالكي؟</p>
+            <button onclick="checkChallenge()" class="btn-main" style="padding:8px; font-size:11px;">الإجابة على التحدي</button>
+        </div>
+    </div>
+
+    <div id="notes-page" class="page">
+        <div class="card" style="border:none; background:transparent; box-shadow:none;">
+            <h3><i class="fas fa-feather-pointed" style="color:var(--gold)"></i> خزانة الفوائد</h3>
+            <textarea id="user-note" style="width:100%; height:200px; border-radius:25px; border:1px solid #ddd; padding:20px; outline:none; background:#fff; line-height:1.6;" placeholder="اكتب هنا فائدة اليوم أو ملاحظة من محاضرة..."></textarea>
+            <button onclick="saveNote()" class="btn-main" style="margin-top:15px; background:var(--gold); color:var(--dark);">حفظ الفائدة في الخزانة ✅</button>
         </div>
     </div>
 
     <div id="profile-page" class="page">
-        <div class="card" style="margin-top:20px; border-bottom: none;">
-            <img id="u-img2" src="https://via.placeholder.com/80" style="border-radius:50%; margin-bottom:15px; border: 2px solid var(--gold);">
-            <h2 id="u-name2" style="margin: 0;">اسم الطالب</h2>
-            <p id="u-id" style="color: #888; font-size: 13px;">ID: 00000000</p>
-            <hr style="opacity: 0.1; margin: 20px 0;">
-            <p style="font-weight: bold;">إعدادات الحساب</p>
-            <button class="dept-btn" onclick="setDept()">تحديد التخصص الدراسي ⚙️</button>
+        <div class="card">
+            <div style="position:relative; width:90px; margin:0 auto;">
+                <img id="u-img" src="https://via.placeholder.com/90" style="border-radius:30px; border:3px solid var(--gold);">
+                <div style="position:absolute; bottom:-5px; right:-5px; background:var(--gold); color:var(--dark); border-radius:50%; width:25px; height:25px; display:flex; align-items:center; justify-content:center; font-size:10px; border:2px solid white;"><i class="fas fa-check"></i></div>
+            </div>
+            <h2 id="u-name" style="margin:15px 0 5px;">طالب العلم</h2>
+            <p id="u-dept-display" style="color:var(--gold); font-weight:bold; font-size:14px;">تخصص: لم يحدد</p>
+            <button class="btn-main" style="margin-top:20px;" onclick="setDept()">تعديل بياناتي الدراسية ⚙️</button>
         </div>
     </div>
 
     <div id="items-page" class="page">
-        <h2 id="items-title" style="color:var(--primary); text-align: center; margin: 25px 0;"></h2>
-        <div class="grid-12" id="items-container"></div>
-        <button class="btn-back" onclick="showPage('home-page', document.querySelector('.fa-home'))">عودة للرئيسية</button>
+        <h2 id="items-title" style="color:var(--primary); text-align: center; margin-bottom:20px;"></h2>
+        <div class="grid" id="items-container" style="grid-template-columns: 1fr 1fr;"></div>
+        <button class="btn-main" style="margin-top:30px; background:var(--dark)" onclick="showPage('home-page', document.querySelector('.fa-home'))">🔙 العودة للرئيسية</button>
     </div>
 
     <div class="nav">
         <i class="fas fa-home nav-item active" onclick="showPage('home-page', this)"></i>
-        <i class="fas fa-user-circle nav-item" onclick="showPage('profile-page', this)"></i>
-        <i class="fas fa-share-alt nav-item" onclick="tg.shareExternal()"></i>
+        <i class="fas fa-lightbulb nav-item" onclick="showPage('notes-page', this)"></i>
+        <i class="fas fa-user-tie nav-item" onclick="showPage('profile-page', this)"></i>
     </div>
 
     <script>
@@ -150,38 +167,51 @@
         tg.ready(); tg.expand();
         tg.setHeaderColor('#1a2a6c');
 
+        // عداد الوقت (خارج الصندوق)
+        let mins = 0;
+        setInterval(() => {
+            mins++;
+            document.getElementById('time-count').innerText = mins;
+            if(mins > 10) document.getElementById('badge-count').innerText = "مجتهد";
+            if(mins > 30) document.getElementById('badge-count').innerText = "عالم";
+        }, 60000);
+
+        // جلب البيانات
         const user = tg.initDataUnsafe?.user;
         if(user) {
             const name = user.first_name + (user.last_name ? ' ' + user.last_name : '');
             document.getElementById('u-name').innerText = name;
-            document.getElementById('u-name2').innerText = name;
-            document.getElementById('u-id').innerText = "ID: " + user.id;
-            if(user.photo_url) {
-                document.getElementById('u-img').src = user.photo_url;
-                document.getElementById('u-img2').src = user.photo_url;
-            }
+            if(user.photo_url) document.getElementById('u-img').src = user.photo_url;
+        }
+
+        function saveNote() {
+            localStorage.setItem('v5_note', document.getElementById('user-note').value);
+            tg.showPopup({message: 'تم حفظ الفائدة بنجاح في ذاكرة الهاتف.'});
+            tg.HapticFeedback.notificationOccurred('success');
+        }
+        document.getElementById('user-note').value = localStorage.getItem('v5_note') || '';
+
+        function checkChallenge() {
+            tg.showPopup({
+                title: 'تحدي اليوم',
+                message: 'الإجابة هي: كتاب (الموطأ) للإمام مالك رضي الله عنه.',
+                buttons: [{type:'ok', text:'أحسنت!'}]
+            });
         }
 
         function setDept() {
             tg.showPopup({
-                title: 'تحديد التخصص',
-                message: 'اختر قسمك الدراسي ليظهر في هويتك:',
-                buttons: [
-                    {id:'s', type:'default', text:'قسم الشريعة'},
-                    {id:'d', type:'default', text:'الدعوة وأصول الدين'}
-                ]
+                title: 'اختيار التخصص',
+                message: 'اختر قسمك الحالي:',
+                buttons: [{id:'s',text:'الشريعة'},{id:'d',text:'الدعوة'}]
             }, (id) => {
                 if(!id) return;
-                const d = id === 's' ? 'تخصص: الشريعة' : 'تخصص: الدعوة';
-                localStorage.setItem('dept', d);
+                const d = id === 's' ? 'تخصص: الشريعة الإسلامية' : 'تخصص: الدعوة وأصول الدين';
+                localStorage.setItem('v5_dept', d);
                 document.getElementById('u-dept-display').innerText = d;
-                tg.HapticFeedback.notificationOccurred('success');
             });
         }
-        
-        if(localStorage.getItem('dept')) {
-            document.getElementById('u-dept-display').innerText = localStorage.getItem('dept');
-        }
+        if(localStorage.getItem('v5_dept')) document.getElementById('u-dept-display').innerText = localStorage.getItem('v5_dept');
 
         function showPage(id, btn) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -190,16 +220,22 @@
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
                 btn.classList.add('active');
             }
-            tg.HapticFeedback.impactOccurred('light');
+            tg.HapticFeedback.impactOccurred('medium');
         }
+
+        const materials = ["الفقه", "الأصول", "الحديث", "التفسير", "اللغة", "العقيدة", "السيرة", "المقاصد", "النحو", "المنطق", "التاريخ", "الآداب"];
 
         function open12(title) {
             document.getElementById('items-title').innerText = title;
             const cont = document.getElementById('items-container');
             cont.innerHTML = '';
-            for(let i=1; i<=12; i++) {
-                cont.innerHTML += `<div class="item-12" onclick="tg.openTelegramLink('https://t.me/channel')">📖 مادة علمية ${i}</div>`;
-            }
+            materials.forEach((m, i) => {
+                cont.innerHTML += `
+                    <div class="item-12" onclick="tg.openTelegramLink('https://t.me/channel')">
+                        <i class="fas fa-file-pdf" style="color:var(--primary); font-size:18px;"></i>
+                        ${m} - درس ${i+1}
+                    </div>`;
+            });
             showPage('items-page');
         }
     </script>
