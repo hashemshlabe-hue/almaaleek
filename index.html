@@ -3,203 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بوابة النخبة - كلية الإمام مالك</title>
+    <title>بوابة كلية الإمام مالك - الإصدار الملكي</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         :root {
-            --primary: #0f172a; --accent: #d4af37; --text-light: #f8fafc;
-            --card-bg: rgba(255, 255, 255, 0.95); --glass: rgba(255, 255, 255, 0.1);
+            --main-color: #1a2a6c;
+            --gold-color: #d4af37;
+            --bg-color: #f4f7f9;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --accent: #b21f1f;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, sans-serif; background: #0f172a;
-            margin: 0; padding: 0; color: var(--text-light); transition: 0.5s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0; padding: 0; color: #333;
+            user-select: none; -webkit-tap-highlight-color: transparent;
         }
 
-        /* الخلفية المتحركة */
-        .bg-animate {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(45deg, #0f172a, #1e293b, #0f172a);
-            background-size: 400% 400%; z-index: -1; animation: gradient 15s ease infinite;
-        }
-        @keyframes gradient { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
-
-        /* الهوية الجامعية */
-        .id-card {
-            margin: 20px; padding: 25px; border-radius: 25px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            backdrop-filter: blur(20px); border: 1px solid var(--glass);
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .user-photo {
-            width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); margin-bottom: 15px;
+        /* شريط التنبيهات */
+        .top-notify {
+            background: var(--gold-color);
+            color: #000; font-size: 11px; font-weight: bold;
+            padding: 5px 0; text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* شبكة الأقسام */
-        .main-menu {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px 100px;
-        }
-        .nav-card {
-            background: var(--glass); padding: 25px 15px; border-radius: 22px;
-            text-align: center; border: 1px solid var(--glass); transition: 0.3s;
-        }
-        .nav-card:active { transform: scale(0.9); background: var(--accent); color: var(--primary); }
-        .nav-card i { font-size: 30px; margin-bottom: 12px; display: block; color: var(--accent); }
-        .nav-card:active i { color: var(--primary); }
-
-        /* عرض المحتوى الداخلي */
-        .content-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #0f172a; z-index: 1000; padding: 20px; box-sizing: border-box;
-            overflow-y: auto; animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @keyframes slideUp { from {transform: translateY(100%);} to {transform: translateY(0);} }
-
-        .list-item {
-            background: rgba(255,255,255,0.05); margin-bottom: 10px; padding: 18px;
-            border-radius: 15px; display: flex; justify-content: space-between; align-items: center;
+        /* رأس الصفحة الفاخر */
+        .hero-section {
+            background: linear-gradient(135deg, var(--main-color), #2a48b1, var(--main-color));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            padding: 40px 20px 80px;
+            color: white; text-align: center;
+            border-radius: 0 0 50px 50px;
+            position: relative;
         }
 
-        /* السبحة الإلكترونية - ميزة خارج الصندوق */
-        .tasbih-box {
-            background: var(--accent); color: var(--primary); padding: 15px;
-            border-radius: 20px; margin: 20px; text-align: center; font-weight: bold;
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* شريط سفلي ذكي */
-        .tab-bar {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; background: rgba(255,255,255,0.1); backdrop-filter: blur(25px);
-            border-radius: 30px; display: flex; justify-content: space-around; padding: 12px;
-            border: 1px solid var(--glass); z-index: 900;
+        /* بطاقة المستخدم المتقدمة */
+        .profile-box {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            margin: -60px 20px 20px;
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            text-align: center;
+            animation: fadeInDown 0.8s;
         }
-        .tab-item { color: var(--text-light); opacity: 0.6; font-size: 20px; }
-        .tab-item.active { opacity: 1; color: var(--accent); }
+
+        .avatar-wrapper {
+            position: relative; width: 85px; height: 85px; margin: -65px auto 15px;
+        }
+
+        .avatar-img {
+            width: 100%; height: 100%; border-radius: 25px;
+            border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            object-fit: cover; background: #fff;
+        }
+
+        .verified-badge {
+            position: absolute; bottom: 0; right: 0;
+            background: #0088cc; color: white;
+            border-radius: 50%; padding: 4px; font-size: 10px;
+            border: 2px solid white;
+        }
+
+        /* الأقسام الرئيسية */
+        .main-container { padding: 10px 20px 120px; }
+        
+        .search-box {
+            background: white; border-radius: 15px; padding: 12px 20px;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+
+        .search-box input {
+            border: none; outline: none; width: 100%; font-family: inherit; font-size: 14px;
+        }
+
+        .grid-layout {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+        }
+
+        .modern-card {
+            background: white; border-radius: 25px; padding: 20px;
+            text-align: center; transition: 0.3s;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative; overflow: hidden;
+        }
+
+        .modern-card:active { transform: scale(0.92); background: #f0f4ff; }
+        
+        .card-icon {
+            width: 50px; height: 50px; background: #f0f4ff;
+            border-radius: 15px; display: flex; align-items: center;
+            justify-content: center; margin: 0 auto 12px; font-size: 24px;
+        }
+
+        .card-label { font-size: 14px; font-weight: 700; color: var(--main-color); }
+        .card-sub { font-size: 10px; color: #999; margin-top: 4px; }
+
+        /* شريط التنقل السفلي الاحترافي */
+        .bottom-nav {
+            position: fixed; bottom: 25px; left: 20px; right: 20px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            height: 70px; border-radius: 25px;
+            display: flex; align-items: center; justify-content: space-around;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .nav-link {
+            text-decoration: none; color: #888;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+
+        .nav-link.active { color: var(--gold-color); }
+        .nav-link i { font-size: 22px; }
+
+        /* الأنظمة المنبثقة */
+        .overlay-view {
+            display: none; position: fixed; inset: 0;
+            background: var(--bg-color); z-index: 2000;
+            padding: 25px; animation: slideInRight 0.4s;
+        }
+
+        @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        .back-circle {
+            width: 40px; height: 40px; background: white;
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
 
     </style>
 </head>
 <body>
 
-    <div class="bg-animate"></div>
+    <div class="top-notify">📢 تنبيه: تم تحديث جدول المحاضرات الأسبوعي بقسم الشريعة</div>
 
-    <div class="id-card">
-        <img id="u-img" src="https://via.placeholder.com/80" class="user-photo">
-        <h2 id="u-name" style="margin: 5px 0; font-size: 20px;">طالب العلم</h2>
-        <div style="font-size: 12px; color: var(--accent); letter-spacing: 2px;">كود: <span id="u-id">000000</span></div>
-        <div style="margin-top: 10px; font-size: 11px; opacity: 0.7;">بوابة كلية الإمام مالك الرقمية</div>
+    <div class="hero-section">
+        <h2 class="animate__animated animate__fadeIn">بوابة كلية الإمام مالك</h2>
+        <div style="font-size: 12px; opacity: 0.8;" id="date-now"></div>
     </div>
 
-    <div class="tasbih-box" onclick="countTasbih()">
-        📿 السبحة الإلكترونية: <span id="t-count">0</span>
-    </div>
-
-    <div class="main-menu">
-        <div class="nav-card" onclick="showSub('year1')">
-            <i class="fas fa-book-open"></i>
-            <b>السنة الأولى</b>
+    <div class="profile-box">
+        <div class="avatar-wrapper">
+            <img id="user-avatar" src="https://via.placeholder.com/100" class="avatar-img">
+            <div class="verified-badge">✓</div>
         </div>
-        <div class="nav-card" onclick="showSub('year2')">
-            <i class="fas fa-graduation-cap"></i>
-            <b>السنة الثانية</b>
-        </div>
-        <div class="nav-card" onclick="openExt('https://t.me/your_library')">
-            <i class="fas fa-file-pdf"></i>
-            <b>المكتبة الشاملة</b>
-        </div>
-        <div class="nav-card" onclick="openExt('https://t.me/your_ads')">
-            <i class="fas fa-bullhorn"></i>
-            <b>الإعلانات</b>
+        <h3 id="user-full-name" style="margin: 0; color: var(--main-color);">طالب العلم</h3>
+        <p style="margin: 5px 0 15px; font-size: 13px; color: #666;">كلية الإمام مالك للعلوم الشرعية</p>
+        <div style="display: flex; justify-content: center; gap: 10px;">
+            <span style="background: #eef2ff; padding: 4px 12px; border-radius: 10px; font-size: 11px; font-weight: bold; color: var(--main-color);">
+                كود: <span id="user-id-text">000000</span>
+            </span>
+            <span style="background: #fff4e5; padding: 4px 12px; border-radius: 10px; font-size: 11px; font-weight: bold; color: #b45309;">
+                مستجد
+            </span>
         </div>
     </div>
 
-    <div id="sub-view" class="content-overlay">
-        <div onclick="closeSub()" style="color: var(--accent); margin-bottom: 20px; cursor: pointer;">
-            <i class="fas fa-chevron-right"></i> عودة للرئيسية
+    <div class="main-container">
+        
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="ابحث عن مادة، كتاب، أو إعلان...">
         </div>
-        <h2 id="sub-title" style="margin-bottom: 25px;"></h2>
-        <div id="sub-list"></div>
+
+        <div style="margin-bottom: 15px; font-weight: bold; color: var(--main-color);">القائمة الرئيسية</div>
+        
+        <div class="grid-layout">
+            <div class="modern-card" onclick="openYearMenu(1)">
+                <div class="card-icon">📚</div>
+                <div class="card-label">السنة الأولى</div>
+                <div class="card-sub">شريعة / دعوة</div>
+            </div>
+            <div class="modern-card" onclick="openYearMenu(2)">
+                <div class="card-icon">🎓</div>
+                <div class="card-label">السنة الثانية</div>
+                <div class="card-sub">شريعة / دعوة</div>
+            </div>
+            <div class="modern-card" onclick="openLink('https://t.me/your_library')">
+                <div class="card-icon">📂</div>
+                <div class="card-label">المكتبة</div>
+                <div class="card-sub">كتب ومذكرات PDF</div>
+            </div>
+            <div class="modern-card" onclick="openLink('https://t.me/your_ads')">
+                <div class="card-icon">🔔</div>
+                <div class="card-label">الإعلانات</div>
+                <div class="card-sub">أحدث الأخبار</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <button onclick="shareApp()" style="width: 100%; padding: 18px; border: none; border-radius: 20px; background: linear-gradient(to right, var(--main-color), #2a48b1); color: white; font-weight: bold; font-size: 15px; box-shadow: 0 10px 25px rgba(26,42,108,0.3);">
+                📤 مشاركة المنصة مع الطلاب
+            </button>
+        </div>
     </div>
 
-    <div class="tab-bar">
-        <i class="fas fa-home tab-item active" onclick="location.reload()"></i>
-        <i class="fas fa-share-alt tab-item" onclick="shareApp()"></i>
-        <i class="fas fa-moon tab-item" onclick="toggleTheme()"></i>
-        <i class="fas fa-user-graduate tab-item" onclick="tg.showAlert('بوابة الطالب v7.0')"></i>
+    <div id="year-overlay" class="overlay-view">
+        <div class="back-circle" onclick="closeOverlay()">🔙</div>
+        <h2 id="overlay-title" style="color: var(--main-color);"></h2>
+        <p style="color: #888; font-size: 14px; margin-bottom: 30px;">اختر القسم الذي ترغب في تصفح دروسه:</p>
+        
+        <div class="modern-card" style="margin-bottom: 15px; display: flex; align-items: center; text-align: right; gap: 20px;" id="btn-sharia">
+            <div class="card-icon" style="margin: 0;">⚖️</div>
+            <div>
+                <div class="card-label">قسم الشريعة الإسلامية</div>
+                <div class="card-sub">الفقه، الأصول، التفسير...</div>
+            </div>
+        </div>
+
+        <div class="modern-card" style="display: flex; align-items: center; text-align: right; gap: 20px;" id="btn-dawa">
+            <div class="card-icon" style="margin: 0;">🕌</div>
+            <div>
+                <div class="card-label">قسم الدعوة وأصول الدين</div>
+                <div class="card-sub">العقيدة، الحديث، الدعوة...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="#" class="nav-link active"><span>🏠</span><div style="font-size: 10px;">الرئيسية</div></a>
+        <a href="#" onclick="openLink('https://t.me/your_daily')" class="nav-link"><span>✨</span><div style="font-size: 10px;">الورد</div></a>
+        <a href="#" onclick="openLink('https://t.me/your_support')" class="nav-link"><span>🎧</span><div style="font-size: 10px;">الدعم</div></a>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.ready(); tg.expand();
-        tg.setHeaderColor('#0f172a');
+        tg.ready();
+        tg.expand();
+        tg.setHeaderColor('#1a2a6c');
 
-        // جلب بيانات المستخدم
+        // جلب بيانات المستخدم وتفعيل التفاعل اللمسي
         const user = tg.initDataUnsafe?.user;
-        if(user) {
-            document.getElementById('u-name').innerText = user.first_name;
-            document.getElementById('u-id').innerText = user.id;
-            if(user.photo_url) document.getElementById('u-img').src = user.photo_url;
+        if (user) {
+            document.getElementById('user-full-name').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+            document.getElementById('user-id-text').innerText = user.id;
+            if (user.photo_url) document.getElementById('user-avatar').src = user.photo_url;
         }
 
-        // نظام المحتوى الذكي
-        const data = {
-            year1: {
-                title: "دروس السنة الأولى",
-                items: [
-                    {n: "قسم الشريعة", l: "https://t.me/sharia1"},
-                    {n: "قسم الدعوة", l: "https://t.me/dawa1"},
-                    {n: "جدول المحاضرات", l: "https://t.me/table1"}
-                ]
-            },
-            year2: {
-                title: "دروس السنة الثانية",
-                items: [
-                    {n: "قسم الشريعة", l: "https://t.me/sharia2"},
-                    {n: "قسم الدعوة", l: "https://t.me/dawa2"},
-                    {n: "النتائج الفصلية", l: "https://t.me/results2"}
-                ]
-            }
-        };
+        // عرض التاريخ الهجري والميلادي تقريبياً
+        const dateOpt = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('date-now').innerText = new Date().toLocaleDateString('ar-SA', dateOpt);
 
-        function showSub(key) {
-            tg.HapticFeedback.impactOccurred('heavy');
-            const view = data[key];
-            document.getElementById('sub-title').innerText = view.title;
-            const list = document.getElementById('sub-list');
-            list.innerHTML = '';
-            view.items.forEach(i => {
-                list.innerHTML += `<div class="list-item" onclick="openExt('${i.l}')">
-                    <span>${i.n}</span>
-                    <i class="fas fa-external-link-alt" style="color:var(--accent)"></i>
-                </div>`;
-            });
-            document.getElementById('sub-view').style.display = 'block';
+        function openYearMenu(y) {
+            tg.HapticFeedback.impactOccurred('medium'); // اهتزاز خفيف
+            document.getElementById('overlay-title').innerText = y === 1 ? 'السنة الأولى' : 'السنة الثانية';
+            
+            document.getElementById('btn-sharia').onclick = () => openLink(y === 1 ? 'https://t.me/sharia1' : 'https://t.me/sharia2');
+            document.getElementById('btn-dawa').onclick = () => openLink(y === 1 ? 'https://t.me/dawa1' : 'https://t.me/dawa2');
+            
+            document.getElementById('year-overlay').style.display = 'block';
         }
 
-        function closeSub() { document.getElementById('sub-view').style.display = 'none'; }
-        
-        function openExt(l) { tg.HapticFeedback.notificationOccurred('success'); tg.openTelegramLink(l); }
+        function closeOverlay() {
+            document.getElementById('year-overlay').style.display = 'none';
+        }
 
-        // ميزة السبحة
-        let count = 0;
-        function countTasbih() {
-            count++;
-            document.getElementById('t-count').innerText = count;
-            tg.HapticFeedback.impactOccurred('light');
+        function openLink(url) {
+            tg.HapticFeedback.notificationOccurred('success');
+            tg.openTelegramLink(url);
         }
 
         function shareApp() {
-            tg.openLink('https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=بوابة كلية الإمام مالك الفاخرة');
-        }
-
-        function toggleTheme() {
-            const b = document.body;
-            if(b.style.background === 'rgb(248, 250, 252)') {
-                b.style.background = '#0f172a'; b.style.color = '#f8fafc';
-            } else {
-                b.style.background = '#f8fafc'; b.style.color = '#0f172a';
-            }
+            const text = "بوابة كلية الإمام مالك الرقمية: علمٌ، تنظيمٌ، وتواصل.";
+            tg.openLink('https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(text));
         }
     </script>
 </body>
