@@ -6,331 +6,149 @@
     <title>بوابة كلية الإمام مالك</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --primary: #1a2a6c;
-            --gold: #c5a059;
-            --white: #ffffff;
-            --bg: #f4f7f6;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            margin: 0; padding: 0; color: #333;
-        }
-        .header {
+        :root { --primary: #1a2a6c; --gold: #c5a059; --bg: #f0f2f5; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); margin: 0; padding: 0; overflow-x: hidden; }
+        
+        /* بطاقة الهوية */
+        .user-card {
             background: linear-gradient(135deg, var(--primary), #2a48b1);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 5px solid var(--gold);
-            border-radius: 0 0 40px 40px;
+            color: white; padding: 25px; border-radius: 0 0 35px 35px;
+            text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-        .search-container {
-            margin: -25px auto 20px;
-            width: 85%;
+        .user-info { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 10px; }
+        .user-avatar { width: 60px; height: 60px; border-radius: 50%; border: 3px solid var(--gold); background: #eee; }
+        .user-id { font-size: 12px; background: rgba(255,255,255,0.2); padding: 2px 10px; border-radius: 10px; }
+
+        .container { padding: 20px; }
+        .section-title { font-weight: bold; color: var(--primary); margin: 15px 5px; display: flex; align-items: center; gap: 10px; }
+        
+        /* الأزرار */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .main-card {
+            background: white; border-radius: 20px; padding: 20px; text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #e0e0e0;
         }
-        .search-bar {
-            width: 100%;
-            padding: 12px 20px;
-            border-radius: 25px;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            outline: none;
-            box-sizing: border-box;
+        .main-card:active { transform: scale(0.95); background: #f9f9f9; }
+        .icon { font-size: 30px; margin-bottom: 8px; display: block; }
+        
+        /* نظام الطبقات */
+        .sub-menu { display: none; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .back-btn { color: var(--gold); cursor: pointer; font-size: 14px; margin-bottom: 10px; display: inline-block; }
+        
+        .footer-nav {
+            background: white; position: fixed; bottom: 0; width: 100%;
+            display: flex; justify-content: space-around; padding: 10px 0;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05); border-radius: 20px 20px 0 0;
         }
-        .section-title {
-            padding: 10px 25px;
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--primary);
-            text-align: right;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            padding: 0 20px;
-        }
-        .card {
-            background: var(--white);
-            border-radius: 18px;
-            padding: 15px;
-            text-align: center;
-            border-bottom: 3px solid transparent;
-            transition: 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .card:active { transform: scale(0.95); border-bottom-color: var(--gold); }
-        .icon-circle {
-            width: 50px; height: 50px;
-            background: #eef2ff;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 10px;
-            font-size: 24px;
-        }
-        .card-title { font-size: 14px; font-weight: 600; color: var(--primary); }
-        .full-card {
-            grid-column: span 2;
-            display: flex; align-items: center; justify-content: space-between;
-            background: var(--white);
-            margin: 0 20px 10px; padding: 15px 20px;
-            border-radius: 18px;
-        }
-        .share-btn {
-            background: var(--gold);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin: 20px auto;
-            display: block;
-            cursor: pointer;
-        }
+        .nav-item { font-size: 12px; color: var(--primary); text-align: center; flex: 1; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2 style="margin:0;">بوابة كلية الإمام مالك</h2>
-        <p style="font-size: 13px; opacity: 0.8;">المنصة التعليمية الشاملة</p>
+    <div class="user-card">
+        <div id="user-photo-container">
+            <img id="user-pic" class="user-avatar" src="https://via.placeholder.com/60" alt="User">
+        </div>
+        <h3 id="user-name" style="margin: 5px 0;">طالب العلم</h3>
+        <div class="user-id">كود الطالب: <span id="user-id-val">000000</span></div>
     </div>
 
-    <div class="search-container">
-        <input type="text" class="search-bar" placeholder="ابحث عن درس أو كتاب...">
-    </div>
-
-    <div class="section-title">المواد العلمية</div>
-    <div class="grid">
-        <div class="card" onclick="openLink('https://t.me/your_aqida')">
-            <div class="icon-circle">💎</div>
-            <div class="card-title">دروس العقيدة</div>
-        </div>
-        <div class="card" onclick="openLink('https://t.me/your_nahw')">
-            <div class="icon-circle">🖋️</div>
-            <div class="card-title">قواعد النحو</div>
-        </div>
-        <div class="card" onclick="openLink('https://t.me/your_usul')">
-            <div class="icon-circle">⚖️</div>
-            <div class="card-title">أصول الفقه</div>
-        </div>
-        <div class="card" onclick="openLink('https://t.me/your_ads')">
-            <div class="icon-circle">📢</div>
-            <div class="card-title">إعلانات الكلية</div>
-        </div>
-    </div>
-
-    <div class="section-title">المصادر الإضافية</div>
-    <div class="full-card" onclick="openLink('https://t.me/your_pdf_library')">
-        <div style="display: flex; align-items: center;">
-            <span style="font-size: 24px; margin-left: 15px;">📚</span>
-            <div style="text-align: right;">
-                <div style="font-weight: bold; color: var(--primary);">مكتبة المتون (PDF)</div>
-                <div style="font-size: 11px; color: #888;">تحميل المذكرات والكتب</div>
+    <div class="container" id="main-view">
+        <div class="section-title"><span>📅</span> السنوات الدراسية</div>
+        <div class="grid">
+            <div class="main-card" onclick="showYear(1)">
+                <span class="icon">❶</span>
+                <div style="font-weight: bold;">السنة الأولى</div>
+            </div>
+            <div class="main-card" onclick="showYear(2)">
+                <span class="icon">❷</span>
+                <div style="font-weight: bold;">السنة الثانية</div>
             </div>
         </div>
-        <span style="color: var(--gold);">◀</span>
-    </div>
 
-    <div class="full-card" onclick="openLink('https://t.me/your_daily')">
-        <div style="display: flex; align-items: center;">
-            <span style="font-size: 24px; margin-left: 15px;">🕌</span>
-            <div style="text-align: right;">
-                <div style="font-weight: bold; color: var(--primary);">الفوائد اليومية</div>
-                <div style="font-size: 11px; color: #888;">مواعظ ومنشورات دينية</div>
+        <div class="section-title"><span>📌</span> أقسام البوابة</div>
+        <div class="grid">
+            <div class="main-card" onclick="openLink('https://t.me/your_library')">
+                <span class="icon">📚</span>
+                <div style="font-weight: bold;">المكتبة</div>
+            </div>
+            <div class="main-card" onclick="openLink('https://t.me/your_ads')">
+                <span class="icon">📢</span>
+                <div style="font-weight: bold;">الإعلانات</div>
             </div>
         </div>
-        <span style="color: var(--gold);">◀</span>
     </div>
 
-    <button class="share-btn" onclick="shareApp()">📦 مشاركة البوابة</button>
-
-    <div style="margin-bottom: 40px; text-align: center; color: #bbb; font-size: 11px;">
-        صُمم لخدمة طلبة العلم | 2026
+    <div class="container sub-menu" id="year1-view">
+        <div class="back-btn" onclick="goBack()">🔙 العودة للرئيسية</div>
+        <div class="section-title">السنة الأولى - اختر التخصص</div>
+        <div class="grid">
+            <div class="main-card" onclick="openLink('https://t.me/sharia1')">
+                <span class="icon">⚖️</span>
+                <div>قسم الشريعة</div>
+            </div>
+            <div class="main-card" onclick="openLink('https://t.me/dawa1')">
+                <span class="icon">📢</span>
+                <div>الدعوة وأصول الدين</div>
+            </div>
+        </div>
     </div>
+
+    <div class="container sub-menu" id="year2-view">
+        <div class="back-btn" onclick="goBack()">🔙 العودة للرئيسية</div>
+        <div class="section-title">السنة الثانية - اختر التخصص</div>
+        <div class="grid">
+            <div class="main-card" onclick="openLink('https://t.me/sharia2')">
+                <span class="icon">⚖️</span>
+                <div>قسم الشريعة</div>
+            </div>
+            <div class="main-card" onclick="openLink('https://t.me/dawa2')">
+                <span class="icon">📢</span>
+                <div>الدعوة وأصول الدين</div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align:center; margin-top:20px;">
+        <button onclick="shareApp()" style="background:var(--gold); color:white; border:none; padding:10px 25px; border-radius:20px; font-weight:bold;">📤 مشاركة البوابة مع الزملاء</button>
+    </div>
+
+    <br><br><br>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-        tg.headerColor = '#1a2a6c';
+
+        // جلب بيانات المستخدم من تلجرام
+        const user = tg.initDataUnsafe?.user;
+        if (user) {
+            document.getElementById('user-name').innerText = (user.first_name || '') + ' ' + (user.last_name || '');
+            document.getElementById('user-id-val').innerText = user.id;
+            if (user.photo_url) {
+                document.getElementById('user-pic').src = user.photo_url;
+            }
+        }
+
+        function showYear(year) {
+            document.getElementById('main-view').style.display = 'none';
+            document.getElementById('year' + year + '-view').style.display = 'block';
+        }
+
+        function goBack() {
+            document.getElementById('year1-view').style.display = 'none';
+            document.getElementById('year2-view').style.display = 'none';
+            document.getElementById('main-view').style.display = 'block';
+        }
 
         function openLink(url) {
             tg.openTelegramLink(url);
         }
 
         function shareApp() {
-            const shareText = "أهلاً بك في بوابة كلية الإمام مالك التعليمية على تلجرام. رابط البوت: ";
-            tg.openLink('https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(shareText));
-        }
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بوابة كلية الإمام مالك</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        :root {
-            --primary: #1a2a6c;
-            --gold: #c5a059;
-            --white: #ffffff;
-            --bg: #f4f7f6;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            margin: 0; padding: 0; color: #333;
-        }
-        .header {
-            background: linear-gradient(135deg, var(--primary), #2a48b1);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 5px solid var(--gold);
-            border-radius: 0 0 40px 40px;
-        }
-        .search-container {
-            margin: -25px auto 20px;
-            width: 85%;
-        }
-        .search-bar {
-            width: 100%;
-            padding: 12px 20px;
-            border-radius: 25px;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            outline: none;
-            box-sizing: border-box;
-        }
-        .section-title {
-            padding: 10px 25px;
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--primary);
-            text-align: right;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            padding: 0 20px;
-        }
-        .card {
-            background: var(--white);
-            border-radius: 18px;
-            padding: 15px;
-            text-align: center;
-            border-bottom: 3px solid transparent;
-            transition: 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .card:active { transform: scale(0.95); border-bottom-color: var(--gold); }
-        .icon-circle {
-            width: 50px; height: 50px;
-            background: #eef2ff;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 10px;
-            font-size: 24px;
-        }
-        .card-title { font-size: 14px; font-weight: 600; color: var(--primary); }
-        .full-card {
-            grid-column: span 2;
-            display: flex; align-items: center; justify-content: space-between;
-            background: var(--white);
-            margin: 0 20px 10px; padding: 15px 20px;
-            border-radius: 18px;
-        }
-        .share-btn {
-            background: var(--gold);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin: 20px auto;
-            display: block;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="header">
-        <h2 style="margin:0;">بوابة كلية الإمام مالك</h2>
-        <p style="font-size: 13px; opacity: 0.8;">المنصة التعليمية الشاملة</p>
-    </div>
-
-    <div class="search-container">
-        <input type="text" class="search-bar" placeholder="ابحث عن درس أو كتاب...">
-    </div>
-
-    <div class="section-title">المواد العلمية</div>
-    <div class="grid">
-        <div class="card" onclick="openLink('https://t.me/your_aqida')">
-            <div class="icon-circle">💎</div>
-            <div class="card-title">دروس العقيدة</div>
-        </div>
-        <div class="card" onclick="openLink('https://t.me/your_nahw')">
-            <div class="icon-circle">🖋️</div>
-            <div class="card-title">قواعد النحو</div>
-        </div>
-        <div class="card" onclick="openLink('https://t.me/your_usul')">
-            <div class="icon-circle">⚖️</div>
-            <div class="card-title">أصول الفقه</div>
-        </div>
-        <div class="card" onclick="openLink('https://t.me/your_ads')">
-            <div class="icon-circle">📢</div>
-            <div class="card-title">إعلانات الكلية</div>
-        </div>
-    </div>
-
-    <div class="section-title">المصادر الإضافية</div>
-    <div class="full-card" onclick="openLink('https://t.me/your_pdf_library')">
-        <div style="display: flex; align-items: center;">
-            <span style="font-size: 24px; margin-left: 15px;">📚</span>
-            <div style="text-align: right;">
-                <div style="font-weight: bold; color: var(--primary);">مكتبة المتون (PDF)</div>
-                <div style="font-size: 11px; color: #888;">تحميل المذكرات والكتب</div>
-            </div>
-        </div>
-        <span style="color: var(--gold);">◀</span>
-    </div>
-
-    <div class="full-card" onclick="openLink('https://t.me/your_daily')">
-        <div style="display: flex; align-items: center;">
-            <span style="font-size: 24px; margin-left: 15px;">🕌</span>
-            <div style="text-align: right;">
-                <div style="font-weight: bold; color: var(--primary);">الفوائد اليومية</div>
-                <div style="font-size: 11px; color: #888;">مواعظ ومنشورات دينية</div>
-            </div>
-        </div>
-        <span style="color: var(--gold);">◀</span>
-    </div>
-
-    <button class="share-btn" onclick="shareApp()">📦 مشاركة البوابة</button>
-
-    <div style="margin-bottom: 40px; text-align: center; color: #bbb; font-size: 11px;">
-        صُمم لخدمة طلبة العلم | 2026
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-        tg.headerColor = '#1a2a6c';
-
-        function openLink(url) {
-            tg.openTelegramLink(url);
-        }
-
-        function shareApp() {
-            const shareText = "أهلاً بك في بوابة كلية الإمام مالك التعليمية على تلجرام. رابط البوت: ";
+            const shareText = "بوابة كلية الإمام مالك - رفيقك في طلب العلم الشرعي:";
             tg.openLink('https://t.me/share/url?url=' + encodeURIComponent(window.location.href) + '&text=' + encodeURIComponent(shareText));
         }
     </script>
