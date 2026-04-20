@@ -5,24 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>بوابة النخبة V9.0 | Elite Portal</title>
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="data:application/manifest+json,{name:'بوابة النخبة',short_name:'النخبة',theme_color:'#1a2a6c',background_color:'#f8fafc',display:'standalone',orientation:'portrait',icons:[{src:'https://via.placeholder.com/192',sizes:'192x192',type:'image/png'}]}">
-    <meta name="theme-color" content="#1a2a6c">
-    
-    <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        /* ===== متغيرات التصميم ===== */
         :root {
             --primary: #1a2a6c;
             --primary-light: #2a3f8c;
             --gold: #d4af37;
             --gold-light: #f5e7b2;
             --accent: #7b2ff7;
-            --accent-light: #a27eff;
             --bg: #f8fafc;
             --surface: #ffffff;
             --text: #1e293b;
@@ -30,26 +22,10 @@
             --glass: rgba(255, 255, 255, 0.85);
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             --border-light: #e2e8f0;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
             --radius-card: 28px;
-            --radius-btn: 18px;
             --transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
         }
 
-        /* ===== الوضع الداكن ===== */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #0f172a;
-                --surface: #1e293b;
-                --text: #f1f5f9;
-                --text-light: #94a3b8;
-                --glass: rgba(30, 41, 59, 0.85);
-                --border-light: #334155;
-                --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            }
-        }
         body.dark-mode {
             --bg: #0f172a;
             --surface: #1e293b;
@@ -60,535 +36,307 @@
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
-        /* ===== الأساسيات ===== */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', 'Tajawal', sans-serif; }
 
         body {
-            font-family: 'Segoe UI', 'Tajawal', system-ui, sans-serif;
             background: var(--bg);
             color: var(--text);
-            transition: background 0.3s, color 0.2s;
-            overflow-x: hidden;
+            transition: var(--transition);
             padding-bottom: 100px;
-            line-height: 1.5;
-            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
         }
 
-        /* ===== الأنماط الأندلسية ===== */
-        .andalusian-pattern {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><path d="M20,20 Q40,5 60,20 T90,20" stroke="%23d4af37" fill="none" stroke-width="1.5"/><path d="M20,40 Q40,25 60,40 T90,40" stroke="%23d4af37" fill="none"/><circle cx="30" cy="70" r="5" fill="%23d4af37"/><circle cx="70" cy="70" r="5" fill="%23d4af37"/></svg>');
-            background-size: 120px;
-        }
-
-        /* ===== شريط الأذكار ===== */
+        /* شريط الأذكار */
         .top-dhikr {
             background: var(--primary);
             color: white;
-            padding: 10px 0;
+            padding: 8px 0;
             font-size: 13px;
             border-bottom: 2px solid var(--gold);
-            white-space: nowrap;
             overflow: hidden;
-            position: relative;
+            white-space: nowrap;
         }
         .scroll-text {
             display: inline-block;
-            padding-left: 100%;
-            animation: scroll 40s linear infinite;
+            animation: scroll 30s linear infinite;
         }
         @keyframes scroll {
-            from { transform: translateX(0); }
+            from { transform: translateX(-100%); }
             to { transform: translateX(100%); }
         }
 
-        /* ===== الهيدر ===== */
+        /* الهيدر */
         .main-header {
             background: linear-gradient(145deg, var(--primary), var(--accent));
-            padding: 45px 20px 90px;
+            padding: 40px 20px 80px;
             color: white;
             text-align: center;
-            border-radius: 0 0 50px 50px;
+            border-radius: 0 0 40px 40px;
             position: relative;
-            box-shadow: var(--shadow);
         }
+
         .theme-toggle {
             position: absolute;
-            top: 16px;
-            right: 16px;
+            top: 20px;
+            right: 20px;
             background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
             border: none;
             color: white;
-            width: 44px;
-            height: 44px;
-            border-radius: 16px;
-            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .theme-toggle:hover {
-            background: rgba(255,255,255,0.4);
-            transform: scale(0.95);
         }
 
-        /* ===== بطاقة الملف الشخصي ===== */
+        /* بطاقة الملف */
         .profile-card {
             background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            margin: -65px 20px 20px;
-            padding: 22px;
+            backdrop-filter: blur(10px);
+            margin: -50px 20px 20px;
+            padding: 20px;
             border-radius: var(--radius-card);
             box-shadow: var(--shadow);
-            border: 1px solid var(--gold-light);
+            border: 1px solid var(--border-light);
         }
-        .avatar-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            margin-bottom: 16px;
-        }
-        .avatar {
-            width: 75px;
-            height: 75px;
-            border-radius: 22px;
-            border: 3px solid var(--gold);
-            object-fit: cover;
-            background: var(--primary-light);
-        }
-        .user-info h2 {
-            font-size: 20px;
-            color: var(--text);
-            margin-bottom: 6px;
-        }
+
+        .avatar-wrapper { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .avatar { width: 65px; height: 65px; border-radius: 18px; border: 2px solid var(--gold); }
+
         .rank-badge {
-            background: linear-gradient(135deg, var(--gold), #b8860b);
-            color: #0f172a;
-            padding: 4px 14px;
-            border-radius: 50px;
-            font-size: 12px;
+            background: var(--gold);
+            color: #000;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 11px;
             font-weight: bold;
-            display: inline-block;
         }
 
-        /* شريط التقدم */
-        .progress-box {
-            margin-top: 5px;
-        }
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            margin-bottom: 6px;
-            color: var(--text-light);
-        }
-        .bar-bg {
-            height: 12px;
-            background: var(--border-light);
-            border-radius: 20px;
-            overflow: hidden;
-        }
-        .bar-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--gold), var(--accent));
-            border-radius: 20px;
-            transition: width 0.5s ease;
-        }
+        .bar-bg { height: 8px; background: var(--border-light); border-radius: 10px; margin-top: 8px; overflow: hidden; }
+        .bar-fill { height: 100%; width: 0%; background: var(--gold); transition: width 0.5s; }
 
-        /* ===== السبحة الحركية المتطورة ===== */
+        /* السبحة */
         .tasbih-section {
             background: var(--surface);
             margin: 20px;
-            padding: 18px 22px;
-            border-radius: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-light);
-        }
-        .tasbih-info {
-            display: flex;
-            flex-direction: column;
-        }
-        .tasbih-label {
-            font-size: 13px;
-            color: var(--text-light);
-        }
-        .tasbih-number {
-            font-size: 42px;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1.2;
-        }
-        .tasbih-target {
-            font-size: 12px;
-            color: var(--accent);
-        }
-        .tasbih-btn {
-            background: linear-gradient(145deg, var(--primary), var(--accent));
-            color: white;
-            border: none;
-            width: 70px;
-            height: 70px;
+            padding: 15px 25px;
             border-radius: 30px;
-            font-size: 30px;
-            box-shadow: 0 8px 20px rgba(123, 47, 247, 0.3);
-            cursor: pointer;
-            transition: var(--transition);
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
+            box-shadow: var(--shadow);
         }
-        .tasbih-btn:active {
-            transform: scale(0.9);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        .bead {
-            position: fixed;
-            width: 14px;
-            height: 14px;
-            background: radial-gradient(circle, var(--gold), #b8860b);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-            animation: beadFly 0.6s cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
-        }
-        @keyframes beadFly {
-            0% { opacity: 1; transform: scale(1) translateY(0); }
-            100% { opacity: 0; transform: scale(0.3) translateY(-140px); }
+        .tasbih-number { font-size: 35px; font-weight: 800; color: var(--primary); }
+        .tasbih-btn {
+            width: 60px; height: 60px; border-radius: 20px;
+            background: var(--primary); color: white; border: none; font-size: 24px;
         }
 
-        /* ===== الصفحات والتنقل ===== */
-        .page {
-            display: none;
-            padding: 0 16px 30px;
-            animation: fadeSlide 0.4s ease;
-        }
-        .page.active {
-            display: block;
-        }
-        @keyframes fadeSlide {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+        /* التنقل */
+        .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .nav-bar {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: var(--surface);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 12px 8px;
-            border-radius: 40px;
-            display: flex;
-            justify-content: space-around;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-            border: 1px solid var(--border-light);
+            position: fixed; bottom: 15px; left: 15px; right: 15px;
+            background: var(--surface); padding: 10px;
+            border-radius: 30px; display: flex; justify-content: space-around;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             z-index: 1000;
         }
-        .nav-item {
-            color: var(--text-light);
-            font-size: 24px;
-            padding: 8px 16px;
-            border-radius: 30px;
-            transition: var(--transition);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-        }
-        .nav-item.active {
-            color: var(--gold);
-            background: rgba(212, 175, 55, 0.1);
-            transform: translateY(-4px);
-        }
-        .nav-item span {
-            font-size: 11px;
-            font-weight: 500;
-        }
+        .nav-item { color: var(--text-light); text-align: center; font-size: 20px; cursor: pointer; }
+        .nav-item.active { color: var(--gold); }
+        .nav-item span { display: block; font-size: 10px; }
 
-        /* ===== البطاقات والشبكة ===== */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: var(--surface); padding: 20px; border-radius: 20px; text-align: center; box-shadow: var(--shadow); }
+        
+        .bead {
+            position: absolute; width: 12px; height: 12px; background: var(--gold);
+            border-radius: 50%; pointer-events: none; animation: fly 0.6s ease-out forwards;
         }
-        .card {
-            background: var(--surface);
-            padding: 22px 16px;
-            border-radius: 25px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-light);
-            transition: var(--transition);
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-        }
-        .card:hover {
-            transform: translateY(-3px);
-            border-color: var(--gold);
-        }
-        .card i {
-            font-size: 32px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 12px;
-        }
-
-        /* ===== إحصائيات ===== */
-        .stats-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .chart-card {
-            background: var(--surface);
-            padding: 20px;
-            border-radius: 30px;
-            box-shadow: var(--shadow);
-        }
-        canvas {
-            max-height: 200px;
-            width: 100% !important;
-        }
-
-        /* ===== عناصر النماذج ===== */
-        .search-input {
-            width: 100%;
-            padding: 18px 20px;
-            border-radius: 25px;
-            border: 1.5px solid var(--border-light);
-            background: var(--surface);
-            color: var(--text);
-            font-size: 16px;
-            outline: none;
-            transition: var(--transition);
-        }
-        .search-input:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
-        }
-
-        .tab-container {
-            display: flex;
-            gap: 8px;
-            background: var(--border-light);
-            padding: 6px;
-            border-radius: 30px;
-            margin-bottom: 20px;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 25px;
-            font-weight: bold;
-            background: transparent;
-            color: var(--text);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .tab-btn.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(26, 42, 108, 0.3);
-        }
-
-        /* ===== الإعدادات ===== */
-        .settings-group {
-            background: var(--surface);
-            border-radius: 25px;
-            padding: 5px 0;
-            margin-bottom: 20px;
-        }
-        .setting-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 18px 20px;
-            border-bottom: 1px solid var(--border-light);
-        }
-        .setting-item:last-child {
-            border-bottom: none;
-        }
-
-        /* ===== أزرار عامة ===== */
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 16px 24px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-        }
-        .btn-gold {
-            background: var(--gold);
-            color: #0f172a;
-        }
-
-        /* ===== سحب للتحديث ===== */
-        .pull-to-refresh {
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-light);
-        }
-
-        /* ===== إشعار منبثق ===== */
-        .toast-message {
-            position: fixed;
-            bottom: 100px;
-            left: 20px;
-            right: 20px;
-            background: var(--surface);
-            padding: 16px;
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            text-align: center;
-            z-index: 2000;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: 0.3s;
-            border-right: 6px solid var(--gold);
-        }
-        .toast-message.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
+        @keyframes fly { to { transform: translateY(-100px); opacity: 0; } }
     </style>
 </head>
-<body id="mainBody">
+<body>
 
-    <!-- شريط الأذكار العلوي -->
     <div class="top-dhikr">
-        <div class="scroll-text">
-            ✨ "فَاذْكُرُونِي أَذْكُرْكُمْ" • سُبْحَانَ اللهِ وَبِحَمْدِهِ • اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ • رَبِّ زِدْنِي عِلْمًا ✨
-        </div>
+        <div class="scroll-text">✨ سُبْحَانَ اللهِ وَبِحَمْدِهِ • اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ • لا إله إلا الله ✨</div>
     </div>
 
-    <!-- الهيدر الرئيسي -->
     <div class="main-header">
-        <button class="theme-toggle" id="themeToggleBtn">
+        <button class="theme-toggle" onclick="toggleTheme()">
             <i class="fa-solid fa-moon"></i>
         </button>
-        <h1 style="font-size: 30px; font-weight: 700; margin-bottom: 5px;">📚 بوابة النخبة</h1>
-        <p id="dailyWisdom" style="font-size: 14px; opacity: 0.9;">"اطلبوا العلم من المهد إلى اللحد"</p>
+        <h1>بوابة النخبة</h1>
+        <p>زادُ طالب العلم</p>
     </div>
 
-    <!-- بطاقة الملف الشخصي -->
     <div class="profile-card">
         <div class="avatar-wrapper">
-            <img id="userAvatar" src="https://ui-avatars.com/api/?name=طالب+علم&background=1a2a6c&color=fff&size=75" class="avatar" alt="Avatar">
-            <div class="user-info">
-                <h2 id="userName">طالب العلم</h2>
-                <span id="rankTag" class="rank-badge">📖 مبتدئ</span>
+            <img src="https://ui-avatars.com/api/?name=User&background=1a2a6c&color=fff" class="avatar">
+            <div>
+                <h3 id="userNameDisplay">طالب العلم</h3>
+                <span class="rank-badge" id="rankBadge">📖 مبتدئ</span>
             </div>
         </div>
-        <div class="progress-box">
-            <div class="progress-header">
-                <span>📊 مستوى التقدم</span>
-                <span id="xpDisplay">0 / 100 XP</span>
-            </div>
-            <div class="bar-bg">
-                <div id="xpBarFill" class="bar-fill" style="width: 0%;"></div>
-            </div>
+        <div class="progress-header" style="display: flex; justify-content: space-between; font-size: 12px;">
+            <span>التقدم للمستوى التالي</span>
+            <span id="xpText">0 / 100 XP</span>
         </div>
-        <div style="display: flex; justify-content: space-around; margin-top: 16px; font-size: 13px;">
-            <span><i class="fa-regular fa-clock"></i> <span id="studyTimeDisplay">0</span> دقيقة</span>
-            <span><i class="fa-regular fa-hand-peace"></i> <span id="tasbihTodayDisplay">0</span> تسبيحة</span>
-        </div>
+        <div class="bar-bg"><div id="xpBar" class="bar-fill"></div></div>
     </div>
 
-    <!-- السبحة الحركية -->
     <div class="tasbih-section">
-        <div class="tasbih-info">
-            <span class="tasbih-label">📿 الذكر اليومي</span>
-            <span class="tasbih-number" id="tasbihCount">0</span>
-            <span class="tasbih-target">🎯 الهدف: 100</span>
+        <div>
+            <p style="font-size: 12px; color: var(--text-light);">الذكر اليومي</p>
+            <div class="tasbih-number" id="tasbihCount">0</div>
         </div>
-        <button class="tasbih-btn" id="tasbihButton">
+        <button class="tasbih-btn" onclick="incrementTasbih(event)">
             <i class="fa-solid fa-fingerprint"></i>
         </button>
     </div>
 
-    <!-- ================= الصفحات ================= -->
-    <!-- الصفحة الرئيسية -->
     <div id="homePage" class="page active">
-        <!-- الورد اليومي -->
-        <div class="card" style="margin-bottom: 20px; text-align: right;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                <i class="fa-solid fa-book-open" style="font-size: 22px;"></i>
-                <h3 style="color: var(--primary);">📜 الورد اليومي</h3>
-            </div>
-            <p id="dailyVerse" style="font-size: 16px; line-height: 1.6;">"... جاري التحميل ..."</p>
-        </div>
-        
-        <!-- تحدي اليوم -->
-        <div class="card" style="margin-bottom: 20px; background: linear-gradient(145deg, #fef9e6, var(--surface));">
-            <div style="display: flex; gap: 12px;">
-                <i class="fa-solid fa-trophy" style="color: var(--gold); font-size: 28px;"></i>
-                <div style="text-align: right;">
-                    <h4 style="margin-bottom: 5px;">🏆 تحدي اليوم</h4>
-                    <p id="dailyChallenge">اقرأ تفسير آية من جزء عم</p>
-                    <button id="completeChallengeBtn" class="btn-gold" style="margin-top: 12px; padding: 10px;">✔️ أنجزت التحدي</button>
-                </div>
-            </div>
-        </div>
-
         <div class="grid-2">
-            <div class="card" data-year="1">
-                <i class="fa-solid fa-book-quran"></i>
-                <b>السنة الأولى</b>
-            </div>
-            <div class="card" data-year="2">
-                <i class="fa-solid fa-graduation-cap"></i>
-                <b>السنة الثانية</b>
-            </div>
-            <div class="card" data-page="stats">
-                <i class="fa-solid fa-chart-pie"></i>
-                <b>الإحصائيات</b>
-            </div>
-            <div class="card" data-page="settings">
-                <i class="fa-solid fa-gear"></i>
-                <b>الإعدادات</b>
-            </div>
+            <div class="card" onclick="alert('قريباً')"><i class="fa-solid fa-book"></i><br><b>المواد</b></div>
+            <div class="card" onclick="showPage('statsPage')"><i class="fa-solid fa-chart-line"></i><br><b>الإحصائيات</b></div>
+            <div class="card" onclick="showPage('settingsPage')"><i class="fa-solid fa-user-gear"></i><br><b>الإعدادات</b></div>
+            <div class="card" onclick="resetData()"><i class="fa-solid fa-rotate-right"></i><br><b>تصفير</b></div>
         </div>
-        
-        <button class="btn" id="shareProgressBtn" style="margin-top: 20px;">
-            <i class="fa-solid fa-share-nodes"></i> مشاركة إنجازي
-        </button>
     </div>
 
-    <!-- صفحة المواد -->
-    <div id="itemsPage" class="page">
-        <h2 id="itemsTitle" style="text-align: center; margin-bottom: 20px; color: var(--primary);">📘 مواد السنة</h2>
-        <div class="tab-container">
-            <button class="tab-btn active" data-dept="sh">⚖️ الشريعة</button>
-            <button class="tab-btn" data-dept="da">🕌 أصول الدين</button>
+    <div id="statsPage" class="page">
+        <div class="card">
+            <h3>📊 إحصائياتك</h3>
+            <p>إجمالي التسبيح: <span id="totalTasbih">0</span></p>
+            <p>المستوى الحالي: <span id="levelDisplay">1</span></p>
         </div>
-        <input type="text" id="searchInput" class="search-input" placeholder="🔍 ابحث عن مادة...">
-        <div id="itemsContainer" 
+        <button class="card" style="width: 100%; margin-top:10px" onclick="showPage('homePage')">عودة</button>
+    </div>
+
+    <div id="settingsPage" class="page">
+        <div class="card">
+            <h3>⚙️ الإعدادات</h3>
+            <input type="text" id="nameInput" placeholder="تغيير الاسم" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 10px; border: 1px solid #ccc;">
+            <button onclick="saveName()" style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 10px;">حفظ</button>
+        </div>
+        <button class="card" style="width: 100%; margin-top:10px" onclick="showPage('homePage')">عودة</button>
+    </div>
+
+    <nav class="nav-bar">
+        <div class="nav-item active" onclick="showPage('homePage')"><i class="fa-solid fa-house"></i><span>الرئيسية</span></div>
+        <div class="nav-item" onclick="showPage('statsPage')"><i class="fa-solid fa-chart-simple"></i><span>الإحصائيات</span></div>
+        <div class="nav-item" onclick="showPage('settingsPage')"><i class="fa-solid fa-gear"></i><span>الإعدادات</span></div>
+    </nav>
+
+    <script>
+        // البيانات
+        let userData = {
+            name: "طالب العلم",
+            xp: 0,
+            level: 1,
+            tasbih: 0,
+            totalTasbih: 0,
+            darkMode: false
+        };
+
+        // تحميل البيانات
+        function loadData() {
+            const saved = localStorage.getItem('elitePortalData');
+            if (saved) {
+                userData = JSON.parse(saved);
+                updateUI();
+            }
+        }
+
+        // حفظ البيانات
+        function saveData() {
+            localStorage.setItem('elitePortalData', JSON.stringify(userData));
+        }
+
+        // تحديث الواجهة
+        function updateUI() {
+            document.getElementById('userNameDisplay').innerText = userData.name;
+            document.getElementById('tasbihCount').innerText = userData.tasbih;
+            document.getElementById('totalTasbih').innerText = userData.totalTasbih;
+            document.getElementById('levelDisplay').innerText = userData.level;
+            
+            // تحديث شريط XP
+            let targetXP = userData.level * 100;
+            let progress = (userData.xp / targetXP) * 100;
+            document.getElementById('xpBar').style.width = progress + '%';
+            document.getElementById('xpText').innerText = `${userData.xp} / ${targetXP} XP`;
+
+            // الرتبة
+            const ranks = ["مبتدئ", "مواظب", "مجتهد", "عالم", "شيخ النخبة"];
+            let rankIndex = Math.min(Math.floor(userData.level / 5), ranks.length - 1);
+            document.getElementById('rankBadge').innerText = "📖 " + ranks[rankIndex];
+
+            // الوضع الداكن
+            if(userData.darkMode) document.body.classList.add('dark-mode');
+            else document.body.classList.remove('dark-mode');
+        }
+
+        // وظيفة التسبيح
+        function incrementTasbih(e) {
+            userData.tasbih++;
+            userData.totalTasbih++;
+            userData.xp += 2; // 2 XP لكل تسبيحة
+
+            // تأثير الحبة
+            const bead = document.createElement('div');
+            bead.className = 'bead';
+            bead.style.left = e.clientX + 'px';
+            bead.style.top = e.clientY + 'px';
+            document.body.appendChild(bead);
+            setTimeout(() => bead.remove(), 600);
+
+            // زيادة المستوى
+            let targetXP = userData.level * 100;
+            if (userData.xp >= targetXP) {
+                userData.level++;
+                userData.xp = 0;
+                alert("تهانينا! ارتفع مستواك إلى " + userData.level);
+            }
+
+            saveData();
+            updateUI();
+        }
+
+        // التنقل بين الصفحات
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            // تحديد الزر النشط بناءً على الصفحة (تبسيط)
+        }
+
+        function toggleTheme() {
+            userData.darkMode = !userData.darkMode;
+            saveData();
+            updateUI();
+        }
+
+        function saveName() {
+            const newName = document.getElementById('nameInput').value;
+            if(newName) {
+                userData.name = newName;
+                saveData();
+                updateUI();
+                alert("تم حفظ الاسم");
+            }
+        }
+
+        function resetData() {
+            if(confirm("هل تريد تصفير جميع بياناتك؟")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // البدء
+        window.onload = loadData;
+    </script>
+</body>
+</html>
