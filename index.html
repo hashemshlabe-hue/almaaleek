@@ -3,210 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بوابة النخبة الإمبراطورية V12</title>
+    <title>بوابة النخبة V8.1 - Pro</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root { 
             --primary: #1a2a6c; --gold: #d4af37; --accent: #7b2ff7;
-            --bg: #f8fafc; --glass: rgba(255, 255, 255, 0.85); --dark-bg: #0f172a;
+            --bg: #f8fafc; --glass: rgba(255, 255, 255, 0.9); --dark-bg: #0f172a;
+            --success: #22c55e;
         }
 
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 0; transition: 0.5s; overflow-x: hidden; }
+        .andalusian-pattern { background-image: url('https://www.transparenttextures.com/patterns/arabesque.png'); }
+
+        /* شريط الأذكار */
+        .top-dhikr { background: var(--primary); color: white; padding: 10px 0; font-size: 11px; border-bottom: 2px solid var(--gold); text-align: center; }
+        .scroll-text { display: inline-block; padding-left: 100%; animation: scroll 40s linear infinite; white-space: nowrap; }
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(100%); } }
+
+        /* الهيدر المتغير حسب الوقت */
+        .main-header { 
+            background: linear-gradient(135deg, var(--primary), var(--accent)); 
+            padding: 50px 20px 110px; color: white; text-align: center; 
+            border-radius: 0 0 60px 60px; position: relative; 
+            transition: 1s;
+        }
+        .night-header { background: linear-gradient(135deg, #0f172a, #1e1b4b); }
+
+        /* بروفايل المستخدم المطور */
+        .profile-card { 
+            background: var(--glass); backdrop-filter: blur(15px); 
+            margin: -80px 20px 20px; padding: 25px; border-radius: 40px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid rgba(212,175,55,0.2); 
+            position: relative;
+        }
         
-        /* أنماط المظهر */
-        .mode-boy { --accent: #3b82f6; --bg: #f0f9ff; }
-        .mode-girl { --accent: #ec4899; --bg: #fff1f2; }
+        .avatar-container { position: relative; width: 80px; height: 80px; margin-bottom: 10px; }
+        .avatar { width: 100%; height: 100%; border-radius: 25px; border: 3px solid var(--gold); object-fit: cover; }
+        .circular-progress {
+            position: absolute; top: -5px; left: -5px; width: 90px; height: 90px;
+            border-radius: 50%; border: 3px solid transparent;
+            border-top-color: var(--success); transform: rotate(45deg);
+        }
 
-        /* الهيدر المطور */
-        .main-header { background: linear-gradient(135deg, var(--primary), var(--accent)); padding: 40px 20px 100px; color: white; text-align: center; border-radius: 0 0 50px 50px; position: relative; }
-        
-        /* نظام المستويات XP */
-        .xp-badge { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: bold; }
-        
-        /* الكروت الزجاجية */
-        .glass-card { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.3); border-radius: 30px; margin: -60px 20px 20px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+        /* نظام المستويات */
+        .rank-badge { font-size: 11px; background: var(--primary); color: white; padding: 4px 12px; border-radius: 12px; margin-top: 5px; display: inline-block; }
 
-        /* الأهداف اليومية (شريط دائري) */
-        .goals-container { display: flex; justify-content: space-around; margin: 20px 0; text-align: center; }
-        .stat-circle { width: 70px; height: 70px; border-radius: 50%; border: 4px solid #eee; display: flex; align-items: center; justify-content: center; position: relative; transition: 0.5s; }
-        .stat-circle b { font-size: 14px; color: var(--primary); }
+        /* السبحة المضيئة */
+        .tasbih-area { 
+            background: white; margin: 0 20px 20px; padding: 25px; border-radius: 35px; 
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04); position: relative;
+        }
+        .ts-glow {
+            position: absolute; right: 25px; width: 65px; height: 65px;
+            background: var(--accent); filter: blur(20px); opacity: 0; transition: 0.3s;
+        }
 
-        /* السبحة الاحترافية */
-        .tasbih-box { background: white; margin: 0 20px 20px; padding: 25px; border-radius: 30px; text-align: center; position: relative; overflow: hidden; cursor: pointer; transition: 0.3s; }
-        .tasbih-box:active { transform: scale(0.96); }
-        .glow-effect { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 0; height: 0; background: var(--accent); opacity: 0.2; border-radius: 50%; pointer-events: none; }
-        @keyframes pulse-glow { 0% { width: 0; height: 0; opacity: 0.5; } 100% { width: 300px; height: 300px; opacity: 0; } }
+        /* الكروت */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { 
+            background: white; padding: 20px; border-radius: 28px; text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #f8fafc; transition: 0.3s; 
+        }
+        .card i { font-size: 32px; color: var(--primary); margin-bottom: 12px; display: block; }
+        .card:active { transform: scale(0.95); }
 
-        /* الأقسام والصفحات */
-        .page { display: none; padding: 0 20px 130px; animation: fadeIn 0.4s ease; }
+        /* الأقسام الصفحات */
+        .page { display: none; padding: 0 20px 140px; animation: fadeIn 0.4s ease; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: white; padding: 20px 15px; border-radius: 25px; text-align: center; border: 1px solid #f1f5f9; transition: 0.3s; }
-        .card i { font-size: 28px; color: var(--accent); margin-bottom: 10px; display: block; }
-
-        /* شريط التنقل السفلي */
-        .nav { position: fixed; bottom: 20px; left: 15px; right: 15px; background: var(--dark-bg); padding: 15px; border-radius: 30px; display: flex; justify-content: space-around; z-index: 1000; }
-        .nav-item { color: rgba(255,255,255,0.3); font-size: 20px; cursor: pointer; text-align: center; }
-        .nav-item.active { color: var(--gold); transform: translateY(-5px); }
-        .nav-item span { display: block; font-size: 9px; margin-top: 4px; }
-
-        /* الأزرار والمداخلات */
-        .btn-toggle { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 12px; cursor: pointer; font-size: 12px; }
+        /* التنقل */
+        .nav { position: fixed; bottom: 20px; left: 15px; right: 15px; background: var(--dark-bg); padding: 18px; border-radius: 35px; display: flex; justify-content: space-around; z-index: 1000; box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+        .nav-item { color: rgba(255,255,255,0.3); font-size: 24px; cursor: pointer; text-align: center; transition: 0.3s; }
+        .nav-item.active { color: var(--gold); transform: translateY(-8px); }
+        .nav-item span { display: block; font-size: 9px; margin-top: 5px; }
     </style>
 </head>
-<body id="mainBody" class="mode-boy">
+<body id="mainBody">
 
-    <div class="main-header">
-        <div class="xp-badge"><i class="fa-solid fa-bolt"></i> <span id="xp-val">0</span> XP</div>
-        <div style="position: absolute; top: 15px; right: 15px; display: flex; gap: 10px;">
-            <button class="btn-toggle" onclick="setGender('boy')"><i class="fa-solid fa-mars"></i></button>
-            <button class="btn-toggle" onclick="setGender('girl')"><i class="fa-solid fa-venus"></i></button>
-        </div>
+    <div class="top-dhikr">
+        <div class="scroll-text">✨ سُبْحَانَ اللَّهِ وَبِحَمْدِهِ • سُبْحَانَ اللَّهِ الْعَظِيمِ • اللَّهُمَّ عِلْمًا نَافِعًا • لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ ✨</div>
+    </div>
+
+    <div class="main-header" id="header">
+        <button class="theme-btn" onclick="togglePattern()"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
         <h1 style="margin:0; font-size: 26px;">بوابة النخبة</h1>
-        <p id="rank-name" style="font-size: 12px; opacity: 0.9;">المستوى 1: طالب العلم</p>
+        <p style="font-size: 11px; opacity: 0.8;" id="greetingText">مرحباً بك في رحاب العلم</p>
     </div>
 
-    <div class="glass-card">
-        <div style="display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
-            <img id="u-img" src="https://via.placeholder.com/65" style="border-radius: 20px; border: 2px solid var(--gold); width:65px;">
+    <div class="profile-card">
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div class="avatar-container">
+                <div class="circular-progress" id="circ-progress"></div>
+                <img id="u-img" src="https://via.placeholder.com/80" class="avatar">
+            </div>
             <div>
-                <h3 id="u-name" style="margin:0; font-size: 18px;">هاشم</h3>
-                <span id="u-id" style="font-size: 10px; color: #888;">ID: 000000</span>
+                <h2 id="u-name" style="margin:0; font-size: 18px; color: var(--primary);">طالب العلم</h2>
+                <div class="rank-badge" id="rank-tag">رتبة: مبتدئ 🎖️</div>
             </div>
         </div>
-
-        <div class="goals-container">
-            <div>
-                <div class="stat-circle" id="study-circle"><b id="study-perc">0%</b></div>
-                <small style="font-size: 10px; display: block; margin-top: 5px;">الدراسة</small>
-            </div>
-            <div>
-                <div class="stat-circle" id="tasbih-circle"><b id="tasbih-perc">0%</b></div>
-                <small style="font-size: 10px; display: block; margin-top: 5px;">التسبيح</small>
-            </div>
+        <div style="margin-top: 15px; background: #f1f5f9; padding: 10px; border-radius: 15px; font-size: 11px; color: #64748b;">
+            <i class="fa-solid fa-bolt" style="color: var(--gold)"></i> الإنجاز اليومي: <span id="time-display" style="font-weight: bold; color: var(--primary);">0 دقيقة</span>
         </div>
     </div>
 
-    <div style="margin: 0 20px 20px; padding: 15px; background: #fff; border-radius: 20px; border-right: 4px solid var(--gold);">
-        <small style="color: var(--gold); font-weight: bold;"><i class="fa-solid fa-star"></i> الورد اليومي:</small>
-        <p id="daily-word" style="margin: 5px 0; font-size: 13px; font-style: italic;">"خيركم من تعلم القرآن وعلمه"</p>
+    <div class="tasbih-area">
+        <div>
+            <span style="font-size: 10px; color: #94a3b8; font-weight: bold;">الورد الحالي</span>
+            <b id="ts-count" style="font-size: 32px; color: var(--primary); display: block; line-height: 1;">0</b>
+        </div>
+        <div class="ts-glow" id="glow"></div>
+        <button onclick="countTasbih(event)" style="background: var(--primary); color: white; border: none; width: 65px; height: 65px; border-radius: 22px; font-size: 24px; box-shadow: 0 10px 20px rgba(26,42,108,0.3); z-index: 2;">
+            <i class="fa-solid fa-hand-pointer"></i>
+        </button>
     </div>
 
     <div id="home-page" class="page active">
-        <div class="tasbih-box" onclick="handleTasbih(event)">
-            <div class="glow-effect" id="glow"></div>
-            <div style="font-size: 11px; color: #888;">المسبحة الإمبراطورية (المس هنا)</div>
-            <b id="ts-count" style="font-size: 40px; color: var(--primary);">0</b>
-            <div style="font-size: 10px; color: var(--gold);">المستهدف: 100 تسبيحة</div>
-        </div>
-
         <div class="grid">
             <div class="card" onclick="openYear('السنة الأولى')"><i class="fa-solid fa-book-open"></i><b>السنة الأولى</b></div>
-            <div class="card" onclick="openYear('السنة الثانية')"><i class="fa-solid fa-graduation-cap"></i><b>السنة الثانية</b></div>
-            <div class="card" onclick="showPage('library-page', document.querySelector('.fa-book'))"><i class="fa-solid fa-book"></i><b>المكتبة</b></div>
-            <div class="card" onclick="showPage('notes-page', document.querySelector('.fa-pen'))"><i class="fa-solid fa-pen"></i><b>المفكرة</b></div>
+            <div class="card" onclick="openYear('السنة الثانية')"><i class="fa-solid fa-scroll"></i><b>السنة الثانية</b></div>
+            <div class="card" onclick="showPage('notes-page', document.querySelector('.fa-feather-pointed'))"><i class="fa-solid fa-feather-pointed"></i><b>مفكرة الطالب</b></div>
+            <div class="card" onclick="tg.showAlert('قريباً: الاختبارات التفاعلية')"><i class="fa-solid fa-vial"></i><b>اختبر نفسك</b></div>
         </div>
-    </div>
 
-    <div id="library-page" class="page">
-        <h2 style="text-align: center; color: var(--primary);">المكتبة العلمية</h2>
-        <div class="grid">
-            <div class="card"><i class="fa-solid fa-file-pdf"></i><b>صحيح البخاري</b></div>
-            <div class="card"><i class="fa-solid fa-file-pdf"></i><b>تفسير الجلالين</b></div>
-            <div class="card"><i class="fa-solid fa-file-pdf"></i><b>متن الآجرومية</b></div>
-            <div class="card"><i class="fa-solid fa-file-pdf"></i><b>رياض الصالحين</b></div>
+        <div class="card" style="grid-column: span 2; margin-top: 15px; text-align: right; background: #fffbeb; border: 1px solid #fef3c7;">
+            <small style="color: var(--gold); font-weight: bold;">📖 كتاب الأسبوع:</small>
+            <p style="margin: 5px 0; font-size: 13px; color: var(--primary); font-weight: bold;">"حلية طالب العلم" - الشيخ بكر أبو زيد</p>
         </div>
     </div>
 
     <div id="items-page" class="page">
         <h2 id="items-title" style="text-align: center; color: var(--primary);"></h2>
-        <div style="display: flex; gap: 10px; margin-bottom: 15px; background: #eee; padding: 5px; border-radius: 12px;">
-            <button id="tab-sh" onclick="switchDept('sh')" style="flex:1; border:none; padding:10px; border-radius:10px; font-weight:bold;">الشريعة</button>
-            <button id="tab-da" onclick="switchDept('da')" style="flex:1; border:none; padding:10px; border-radius:10px; font-weight:bold; background:none;">الدعوة</button>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; background: #eee; padding: 5px; border-radius: 15px;">
+            <button class="tab-btn" style="flex:1; border:none; padding:12px; border-radius:10px; font-weight:bold;" id="tab-sh" onclick="switchDept('sh')">الشريعة</button>
+            <button class="tab-btn" style="flex:1; border:none; padding:12px; border-radius:10px; font-weight:bold; background:none;" id="tab-da" onclick="switchDept('da')">الدعوة</button>
         </div>
-        <input type="text" id="search" style="width:100%; padding:15px; border-radius:15px; border:1px solid #ddd; margin-bottom:15px; box-sizing:border-box;" placeholder="بحث في المنهج..." onkeyup="renderItems()">
-        <div id="items-container" class="grid"></div>
+        <div class="grid" id="items-container"></div>
+        <button onclick="showPage('home-page', document.querySelector('.fa-house'))" style="width:100%; padding:18px; border-radius:25px; background: var(--dark-bg); color: white; border: none; margin-top: 30px; font-weight: bold;">العودة</button>
+    </div>
+
+    <div id="notes-page" class="page">
+        <div class="card" style="text-align: right;">
+            <h3><i class="fa-solid fa-pen-fancy"></i> تقييد العلم</h3>
+            <textarea id="note-input" style="width:100%; border:1px solid #eee; border-radius:18px; padding:15px; outline:none; font-family: inherit;" rows="4" placeholder="اكتب فائدة سمعتها اليوم..."></textarea>
+            <button onclick="addNote()" style="width:100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 18px; margin-top: 10px; font-weight: bold;">حفظ الفائدة +</button>
+        </div>
+        <div id="notes-list" style="margin-top: 20px;"></div>
     </div>
 
     <div class="nav">
         <div class="nav-item active" onclick="showPage('home-page', this)"><i class="fa-solid fa-house"></i><span>الرئيسية</span></div>
-        <div class="nav-item" onclick="showPage('library-page', this)"><i class="fa-solid fa-book"></i><span>المكتبة</span></div>
-        <div class="nav-item" onclick="showPage('notes-page', this)"><i class="fa-solid fa-pen"></i><span>المفكرة</span></div>
+        <div class="nav-item" onclick="showPage('notes-page', this)"><i class="fa-solid fa-feather-pointed"></i><span>المفكرة</span></div>
         <div class="nav-item" onclick="tg.shareExternal()"><i class="fa-solid fa-share-nodes"></i><span>مشاركة</span></div>
+        <div class="nav-item" onclick="tg.openTelegramLink('https://t.me/YourSupport')"><i class="fa-solid fa-headset"></i><span>دعم</span></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.ready(); tg.expand();
+        tg.ready();
 
-        // 1. نظام الخبرة والمستويات (RPG)
-        let xp = parseInt(localStorage.getItem('xp_v12')) || 0;
-        let tsCount = parseInt(localStorage.getItem('ts_v12')) || 0;
-        let studyMins = parseInt(localStorage.getItem('study_v12')) || 0;
-
-        function updateXP(amount) {
-            xp += amount;
-            localStorage.setItem('xp_v12', xp);
-            document.getElementById('xp-val').innerText = xp;
-            updateLevel();
-            updateGoals();
+        // 1. الوضع الليلي التلقائي حسب الساعة
+        const hour = new Date().getHours();
+        if(hour > 18 || hour < 6) {
+            document.getElementById('header').classList.add('night-header');
+            document.getElementById('greetingText').innerText = "مساء العلم والهمة يا طالب النخبة";
         }
 
-        function updateLevel() {
-            let level = Math.floor(xp / 500) + 1;
-            let rank = "طالب";
-            if(level > 5) rank = "مجتهد";
-            if(level > 10) rank = "عالم";
-            if(level > 20) rank = "إمبراطور العلم";
-            document.getElementById('rank-name').innerText = `المستوى ${level}: ${rank}`;
-        }
-
-        function updateGoals() {
-            let tsPerc = Math.min((tsCount / 100) * 100, 100);
-            let studyPerc = Math.min((studyMins / 30) * 100, 100);
+        // 2. نظام الإنجاز والتقدم
+        let studyTime = parseInt(localStorage.getItem('study_v81_pro')) || 0;
+        function updateStats() {
+            document.getElementById('time-display').innerText = studyTime + " دقيقة";
+            let progress = (studyTime / 60) * 360;
+            document.getElementById('circ-progress').style.transform = `rotate(${progress}deg)`;
             
-            document.getElementById('tasbih-perc').innerText = Math.round(tsPerc) + "%";
-            document.getElementById('study-perc').innerText = Math.round(studyPerc) + "%";
-            
-            document.getElementById('tasbih-circle').style.borderColor = tsPerc === 100 ? 'var(--gold)' : '#eee';
-            document.getElementById('study-circle').style.borderColor = studyPerc === 100 ? 'var(--accent)' : '#eee';
+            if(studyTime > 20) document.getElementById('rank-tag').innerText = "رتبة: مجتهد 🏆";
+            if(studyTime > 50) document.getElementById('rank-tag').innerText = "رتبة: عالم 👑";
         }
+        setInterval(() => { studyTime++; localStorage.setItem('study_v81_pro', studyTime); updateStats(); }, 60000);
+        updateStats();
 
-        // 2. السبحة الاحترافية
-        function handleTasbih(e) {
+        // 3. السبحة مع تأثير التوهج
+        let tsCount = parseInt(localStorage.getItem('ts_v81_pro')) || 0;
+        document.getElementById('ts-count').innerText = tsCount;
+        function countTasbih(e) {
             tsCount++;
-            localStorage.setItem('ts_v12', tsCount);
             document.getElementById('ts-count').innerText = tsCount;
-            
-            // اهتزاز وتأثير
-            tg.HapticFeedback.impactOccurred('medium');
+            localStorage.setItem('ts_v81_pro', tsCount);
+            tg.HapticFeedback.impactOccurred('light');
+
+            // تأثير التوهج
             const glow = document.getElementById('glow');
-            glow.style.animation = 'none';
-            void glow.offsetWidth;
-            glow.style.animation = 'pulse-glow 0.5s ease-out';
-            
-            updateXP(1); // 1 XP لكل تسبيحة
+            glow.style.opacity = '0.6';
+            setTimeout(() => glow.style.opacity = '0', 200);
         }
 
-        // 3. نظام المظهر (ولد/بنت)
-        function setGender(g) {
-            document.body.className = (g === 'boy') ? 'mode-boy' : 'mode-girl';
-            localStorage.setItem('gender_v12', g);
-            tg.HapticFeedback.notificationOccurred('success');
-        }
-        setGender(localStorage.getItem('gender_v12') || 'boy');
-
-        // 4. عداد الدراسة التلقائي
-        setInterval(() => {
-            studyMins++;
-            localStorage.setItem('study_v12', studyMins);
-            updateXP(10); // 10 XP لكل دقيقة دراسة
-        }, 60000);
-
-        // 5. إدارة الأقسام (المواد)
+        // 4. المواد والأقسام (12 مادة لكل قسم)
         const materials = {
             sh: ["الفقه المالكي", "أصول الفقه", "القواعد الفقهية", "المواريث", "فقه المعاملات", "فقه الجنايات", "فقه العبادات", "فقه الأسرة", "تاريخ التشريع", "أصول البحث", "القضاء الشرعي", "مقاصد الشريعة"],
             da: ["تفسير الأحكام", "علوم الحديث", "أصول الدعوة", "مقارنة الأديان", "السيرة النبوية", "العقيدة والتوحيد", "اللغة العربية", "النحو والصرف", "البلاغة", "المنطق", "الأخلاق والسلوك", "الملل والنحل"]
@@ -222,32 +215,40 @@
             renderItems();
         }
         function renderItems() {
-            const q = document.getElementById('search').value;
-            const cont = document.getElementById('items-container');
-            cont.innerHTML = '';
-            materials[currentDept].filter(m => m.includes(q)).forEach(m => {
-                cont.innerHTML += `<div class="card" onclick="tg.showAlert('${m}')"><i class="fa-solid fa-file-pdf"></i><b>${m}</b></div>`;
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+            materials[currentDept].forEach(m => {
+                container.innerHTML += `<div class="card" onclick="tg.showAlert('${m}')"><i class="fa-solid fa-file-pdf"></i><b>${m}</b></div>`;
             });
         }
 
-        // 6. التنقل
+        // 5. المفكرة والوظائف العامة
+        let notes = JSON.parse(localStorage.getItem('notes_v81_pro')) || [];
+        function renderNotes() {
+            const list = document.getElementById('notes-list');
+            list.innerHTML = '';
+            notes.forEach((n, i) => {
+                list.innerHTML += `<div class="card" style="text-align:right; margin-bottom:10px; border-right: 5px solid var(--accent);">${n}</div>`;
+            });
+        }
+        function addNote() {
+            const val = document.getElementById('note-input').value;
+            if(val) { notes.push(val); localStorage.setItem('notes_v81_pro', JSON.stringify(notes)); document.getElementById('note-input').value=''; renderNotes(); }
+        }
+        renderNotes();
+
+        function togglePattern() { document.getElementById('mainBody').classList.toggle('andalusian-pattern'); }
         function showPage(id, btn) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if(btn) {
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                btn.classList.add('active');
-            }
-            tg.HapticFeedback.impactOccurred('light');
+            if(btn) { document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); btn.classList.add('active'); }
         }
 
-        // تهيئة البيانات
-        if(user = tg.initDataUnsafe?.user) {
+        const user = tg.initDataUnsafe?.user;
+        if(user) {
             document.getElementById('u-name').innerText = user.first_name;
-            document.getElementById('u-id').innerText = "ID: " + user.id;
             if(user.photo_url) document.getElementById('u-img').src = user.photo_url;
         }
-        updateXP(0); // تحديث العرض عند التشغيل
         switchDept('sh');
     </script>
 </body>
