@@ -3,244 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بوابة النخبة V9.0</title>
+    <title>بوابة النخبة V9.5 - Pro</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root { 
-            --primary: #1a2a6c; --gold: #d4af37; --accent: #7b2ff7;
-            --bg: #f8fafc; --glass: rgba(255, 255, 255, 0.9); --dark-bg: #0f172a;
+            --primary: #0f172a; --gold: #eab308; --accent: #6366f1;
+            --glass: rgba(255, 255, 255, 0.85); --bg: #f1f5f9;
         }
 
-        body.mode-boy { --primary: #1a2a6c; --accent: #3b82f6; --bg: #f0f9ff; }
-        body.mode-girl { --primary: #be185d; --accent: #ec4899; --bg: #fff1f2; }
+        body.mode-boy { --accent: #3b82f6; --bg: #f0f9ff; }
+        body.mode-girl { --accent: #ec4899; --bg: #fff1f2; }
 
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 0; transition: 0.5s; overflow-x: hidden; user-select: none; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; transition: 0.5s; overflow-x: hidden; }
         .andalusian-pattern { background-image: url('https://www.transparenttextures.com/patterns/arabesque.png'); }
 
-        .main-header { background: linear-gradient(135deg, var(--primary), var(--accent)); padding: 40px 20px 90px; color: white; text-align: center; border-radius: 0 0 50px 50px; position: relative; }
-        .controls-top { position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; }
-        .control-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px; border-radius: 10px; cursor: pointer; }
+        /* شريط الأذكار العلوي المطور */
+        .top-ticker { background: var(--primary); color: var(--gold); padding: 10px 0; font-size: 11px; border-bottom: 1px solid rgba(234,179,8,0.3); z-index: 2000; position: relative; }
+        .scroll-text { display: inline-block; white-space: nowrap; animation: scroll 30s linear infinite; }
+        @keyframes scroll { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
-        /* الملف الشخصي المطور */
-        .profile-card { background: var(--glass); backdrop-filter: blur(15px); margin: -60px 20px 20px; padding: 20px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid rgba(212,175,55,0.2); }
-        .u-info { display: flex; align-items: center; gap: 15px; }
-        .avatar { width: 65px; height: 65px; border-radius: 20px; border: 2px solid var(--gold); }
-        .u-details h2 { margin: 0; font-size: 17px; color: var(--primary); }
-        .u-sub { font-size: 10px; color: #666; display: flex; flex-direction: column; gap: 2px; }
-        .spec-tag { color: var(--accent); font-weight: bold; cursor: pointer; text-decoration: underline; }
-
-        /* السبحة كاملة اللمس */
-        .tasbih-full-touch { 
-            background: white; margin: 0 20px 20px; height: 120px; border-radius: 30px; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-            cursor: pointer; touch-action: none;
+        /* الهيدر الحديث */
+        .main-header { 
+            background: linear-gradient(135deg, var(--primary), var(--accent)); 
+            padding: 40px 20px 100px; color: white; text-align: center; 
+            border-radius: 0 0 50px 50px; position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        .ts-glow { position: absolute; width: 100px; height: 100px; background: var(--accent); filter: blur(40px); opacity: 0; transition: 0.2s; pointer-events: none; }
-        .touch-effect { position: absolute; width: 20px; height: 20px; background: var(--gold); border-radius: 50%; opacity: 0.5; pointer-events: none; animation: pulse 0.4s ease-out forwards; }
-        @keyframes pulse { to { transform: scale(4); opacity: 0; } }
+        
+        .header-controls { position: absolute; top: 15px; right: 15px; display: flex; gap: 10px; z-index: 10; }
+        .h-btn { background: rgba(255,255,255,0.15); backdrop-filter: blur(5px); border: none; color: white; width: 35px; height: 35px; border-radius: 12px; cursor: pointer; transition: 0.3s; }
+        .h-btn:active { transform: scale(0.9); }
 
-        /* المفكرة المطورة */
-        .note-category { display: flex; gap: 5px; margin: 10px 0; flex-wrap: wrap; }
-        .cat-btn { font-size: 10px; padding: 5px 10px; border-radius: 8px; border: 1px solid #ddd; background: white; cursor: pointer; }
-        .cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .note-item { 
-            background: white; padding: 15px; border-radius: 20px; margin-bottom: 10px; 
-            border-right: 5px solid var(--accent); position: relative; transition: 0.3s;
+        /* الملف الشخصي (Glassmorphism) */
+        .profile-card { 
+            background: var(--glass); backdrop-filter: blur(20px); 
+            margin: -70px 20px 20px; padding: 25px; border-radius: 35px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.5);
+            display: flex; align-items: center; gap: 20px;
         }
-        .note-item:active { transform: scale(0.98); background: #f0f0f0; }
-        .note-cat-label { font-size: 9px; background: #eee; padding: 2px 6px; border-radius: 4px; float: left; }
+        .avatar-frame { position: relative; padding: 3px; background: linear-gradient(45deg, var(--gold), var(--accent)); border-radius: 25px; }
+        .avatar { width: 75px; height: 75px; border-radius: 22px; object-fit: cover; border: 2px solid white; }
+        
+        .u-details h2 { margin: 0; font-size: 20px; color: var(--primary); font-weight: 800; }
+        .u-meta { font-size: 11px; color: #64748b; margin-top: 5px; line-height: 1.6; }
+        .badge-spec { background: var(--primary); color: white; padding: 2px 8px; border-radius: 8px; font-weight: bold; font-size: 9px; cursor: pointer; }
 
-        .page { display: none; padding: 0 20px 130px; animation: fadeIn 0.4s ease; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* السبحة الاحترافية */
+        .tasbih-container { 
+            background: white; margin: 0 20px 20px; padding: 30px; border-radius: 35px; 
+            text-align: center; position: relative; overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03); cursor: pointer;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .tasbih-container:active { transform: scale(0.96); }
+        .ts-label { font-size: 12px; color: #94a3b8; font-weight: 600; letter-spacing: 1px; }
+        #ts-count { font-size: 55px; color: var(--primary); display: block; margin: 10px 0; font-weight: 900; }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: white; padding: 20px; border-radius: 25px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .card i { font-size: 28px; color: var(--primary); margin-bottom: 8px; display: block; }
+        /* الشبكة الأنيقة */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 0 20px 140px; }
+        .card { 
+            background: white; padding: 25px 15px; border-radius: 30px; 
+            text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            border: 1px solid #f1f5f9; transition: 0.3s;
+        }
+        .card i { font-size: 32px; background: linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
+        .card b { display: block; font-size: 14px; color: var(--primary); }
 
-        .nav { position: fixed; bottom: 20px; left: 15px; right: 15px; background: var(--dark-bg); padding: 15px; border-radius: 30px; display: flex; justify-content: space-around; z-index: 1000; }
-        .nav-item { color: rgba(255,255,255,0.4); text-align: center; }
+        /* التنقل السفلي (Telegram Style) */
+        .nav-bar { 
+            position: fixed; bottom: 20px; left: 15px; right: 15px; 
+            background: #0f172a; padding: 15px; border-radius: 35px; 
+            display: flex; justify-content: space-around; z-index: 1000;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .nav-item { color: rgba(255,255,255,0.4); text-align: center; transition: 0.3s; position: relative; }
         .nav-item.active { color: var(--gold); }
-        .nav-item span { display: block; font-size: 9px; }
+        .nav-item i { font-size: 22px; }
+        .nav-item span { display: block; font-size: 10px; margin-top: 5px; }
+
+        /* المفكرة */
+        .page { display: none; padding: 0 20px 140px; animation: slideUp 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .note-input-box { background: white; padding: 20px; border-radius: 30px; margin-bottom: 20px; }
+        .note-item { background: white; padding: 20px; border-radius: 25px; margin-bottom: 12px; border-right: 6px solid var(--accent); position: relative; }
     </style>
 </head>
-<body id="mainBody" class="mode-boy">
+<body id="mainBody">
+
+    <div class="top-ticker">
+        <div class="scroll-text">✨ "اللهم علمنا ما ينفعنا وانفعنا بما علمتنا" • "سبحان الله وبحمده سبحان الله العظيم" • "لا إله إلا أنت سبحانك إني كنت من الظالمين" • "يا حي يا قيوم برحمتك أستغيث" ✨</div>
+    </div>
 
     <div class="main-header">
-        <div class="controls-top">
-            <button class="control-btn" onclick="setGender('boy')"><i class="fa-solid fa-mars"></i></button>
-            <button class="control-btn" onclick="setGender('girl')"><i class="fa-solid fa-venus"></i></button>
-            <button class="control-btn" onclick="togglePattern()"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+        <div class="header-controls">
+            <button class="h-btn" onclick="setGender('boy')"><i class="fa-solid fa-mars"></i></button>
+            <button class="h-btn" onclick="setGender('girl')"><i class="fa-solid fa-venus"></i></button>
+            <button class="h-btn" onclick="togglePattern()"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
         </div>
-        <h1 style="margin:0; font-size: 24px;">بوابة النخبة</h1>
-        <div id="xp-bar" style="width: 120px; height: 4px; background: rgba(255,255,255,0.2); margin: 8px auto; border-radius: 10px; overflow: hidden;">
-            <div id="xp-fill" style="width: 20%; height: 100%; background: var(--gold);"></div>
-        </div>
+        <h1 style="margin:0; font-size: 28px; font-weight: 900; letter-spacing: -1px;">بوابة النخبة</h1>
+        <div style="margin-top: 10px; font-size: 11px; opacity: 0.7;">أهلاً بك يا طالب النخبة في رحاب العلم</div>
     </div>
 
     <div class="profile-card">
-        <div class="u-info">
-            <img id="u-img" src="https://via.placeholder.com/70" class="avatar">
-            <div class="u-details">
-                <h2 id="u-name">هاشم</h2>
-                <div class="u-sub">
-                    <span>الكود: <b id="u-id">#HA-2026</b></span>
-                    <span>التخصص: <span class="spec-tag" onclick="changeSpec()" id="u-spec">شريعة</span></span>
-                </div>
+        <div class="avatar-frame">
+            <img id="u-img" src="https://via.placeholder.com/80" class="avatar">
+        </div>
+        <div class="u-details">
+            <h2 id="u-name">هاشم شلابي</h2>
+            <div class="u-meta">
+                الكود: <b style="color:var(--primary)">#ID-2083</b><br>
+                التخصص: <span class="badge-spec" onclick="changeSpec()" id="u-spec">شريعة</span>
             </div>
         </div>
     </div>
 
-    <div class="tasbih-full-touch" id="tasbihArea" onpointerdown="handleTouch(event)">
-        <div class="ts-glow" id="glow"></div>
-        <span style="font-size: 11px; color: #aaa; z-index: 1;">المس في أي مكان للذكر</span>
-        <b id="ts-count" style="font-size: 45px; color: var(--primary); z-index: 1; transition: 0.2s;">0</b>
+    <div class="tasbih-container" onclick="handleTasbih(event)">
+        <span class="ts-label">المس في أي مكان للذكر</span>
+        <b id="ts-count">0</b>
+        <div style="display: flex; justify-content: center; gap: 5px;">
+            <div style="width: 4px; height: 4px; background: #ddd; border-radius: 50%;"></div>
+            <div style="width: 4px; height: 4px; background: var(--gold); border-radius: 50%;"></div>
+            <div style="width: 4px; height: 4px; background: #ddd; border-radius: 50%;"></div>
+        </div>
     </div>
 
     <div id="home-page" class="page active">
         <div class="grid">
-            <div class="card" onclick="openYear('السنة الأولى')"><i class="fa-solid fa-book-quran"></i><b>السنة الأولى</b></div>
-            <div class="card" onclick="openYear('السنة الثانية')"><i class="fa-solid fa-graduation-cap"></i><b>السنة الثانية</b></div>
-            <div class="card" onclick="showPage('lib-page', document.querySelector('.fa-book'))"><i class="fa-solid fa-book"></i><b>المكتبة</b></div>
-            <div class="card" onclick="showPage('notes-page', document.querySelector('.fa-feather-pointed'))"><i class="fa-solid fa-feather-pointed"></i><b>خزانة الفوائد</b></div>
-        </div>
-    </div>
-
-    <div id="notes-page" class="page">
-        <div class="card" style="text-align: right; padding: 15px;">
-            <textarea id="note-input" style="width:100%; border:1px solid #eee; border-radius:15px; padding:12px; outline:none; font-family: inherit;" rows="3" placeholder="ما هي الفائدة الجديدة؟"></textarea>
-            <div class="note-category" id="cat-list">
-                <div class="cat-btn active" onclick="setCat('عامة', this)">عامة</div>
-                <div class="cat-btn" onclick="setCat('فقه', this)">فقه</div>
-                <div class="cat-btn" onclick="setCat('عقيدة', this)">عقيدة</div>
-                <div class="cat-btn" onclick="setCat('تفسير', this)">تفسير</div>
-                <div class="cat-btn" onclick="setCat('أصول', this)">أصول</div>
+            <div class="card" onclick="tg.showAlert('محتوى السنة الأولى')">
+                <i class="fa-solid fa-moon"></i>
+                <b>السنة الأولى</b>
             </div>
-            <button onclick="addNote()" style="width:100%; background: var(--primary); color:white; border: none; padding: 12px; border-radius: 12px; font-weight: bold;">حفظ الفائدة</button>
+            <div class="card" onclick="tg.showAlert('محتوى السنة الثانية')">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <b>السنة الثانية</b>
+            </div>
+            <div class="card" onclick="showPage('lib-page', document.querySelector('.fa-book'))">
+                <i class="fa-solid fa-book-bookmark"></i>
+                <b>المكتبة</b>
+            </div>
+            <div class="card" onclick="showPage('notes-page', document.querySelector('.fa-feather'))">
+                <i class="fa-solid fa-feather-pointed"></i>
+                <b>خزانة الفوائد</b>
+            </div>
         </div>
-        <div id="notes-list" style="margin-top: 20px;"></div>
     </div>
 
-    <div id="lib-page" class="page">
-        <h3 style="text-align:center;">المكتبة الرقمية</h3>
-        <div class="grid" id="lib-container"></div>
-    </div>
-
-    <div class="nav">
-        <div class="nav-item active" onclick="showPage('home-page', this)"><i class="fa-solid fa-house"></i><span>الرئيسية</span></div>
-        <div class="nav-item" onclick="showPage('notes-page', this)"><i class="fa-solid fa-feather-pointed"></i><span>المفكرة</span></div>
-        <div class="nav-item" onclick="tg.shareExternal()"><i class="fa-solid fa-share-nodes"></i><span>مشاركة</span></div>
-        <div class="nav-item" onclick="tg.openTelegramLink('https://t.me/Support')"><i class="fa-solid fa-circle-user"></i><span>حسابي</span></div>
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="showPage('home-page', this)"><i class="fa-solid fa-house-chimney"></i><span>الرئيسية</span></div>
+        <div class="nav-item" onclick="showPage('notes-page', this)"><i class="fa-solid fa-feather"></i><span>المفكرة</span></div>
+        <div class="nav-item" onclick="tg.shareExternal()"><i class="fa-solid fa-paper-plane"></i><span>مشاركة</span></div>
+        <div class="nav-item" onclick="tg.showAlert('قريباً: حسابي الشخصي')"><i class="fa-solid fa-user-gear"></i><span>حسابي</span></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.ready();
-        
-        let ts = parseInt(localStorage.getItem('v9_ts')) || 0;
-        let notes = JSON.parse(localStorage.getItem('v9_notes')) || [];
-        let currentCat = 'عامة';
-        let spec = localStorage.getItem('v9_spec') || 'شريعة';
+        tg.ready(); tg.expand();
 
-        // 1. السبحة كاملة اللمس
-        function handleTouch(e) {
-            ts++;
-            document.getElementById('ts-count').innerText = ts;
-            document.getElementById('ts-count').style.transform = 'scale(1.2)';
-            setTimeout(() => document.getElementById('ts-count').style.transform = 'scale(1)', 100);
-            localStorage.setItem('v9_ts', ts);
-            
-            tg.HapticFeedback.impactOccurred('medium');
-
-            // تأثير بصري عند اللمس
-            const rect = e.currentTarget.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const effect = document.createElement('div');
-            effect.className = 'touch-effect';
-            effect.style.left = x + 'px';
-            effect.style.top = y + 'px';
-            e.currentTarget.appendChild(effect);
-            setTimeout(() => effect.remove(), 400);
-        }
-
-        // 2. إدارة التخصص
-        function changeSpec() {
-            const specs = ['شريعة', 'دعوة وأصول الدين'];
-            spec = specs[specs.indexOf(spec) === 0 ? 1 : 0];
-            document.getElementById('u-spec').innerText = spec;
-            localStorage.setItem('v9_spec', spec);
-            tg.HapticFeedback.notificationOccurred('success');
-        }
+        let count = parseInt(localStorage.getItem('v95_ts')) || 0;
+        let spec = localStorage.getItem('v95_spec') || 'شريعة';
+        document.getElementById('ts-count').innerText = count;
         document.getElementById('u-spec').innerText = spec;
 
-        // 3. المفكرة المتطورة
-        function setCat(c, btn) {
-            currentCat = c;
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        function handleTasbih(e) {
+            count++;
+            document.getElementById('ts-count').innerText = count;
+            localStorage.setItem('v95_ts', count);
+            tg.HapticFeedback.impactOccurred('medium');
+
+            // تأثير بصري للرقم
+            const countEl = document.getElementById('ts-count');
+            countEl.style.transform = 'scale(1.1)';
+            setTimeout(() => countEl.style.transform = 'scale(1)', 100);
         }
 
-        function addNote() {
-            const val = document.getElementById('note-input').value;
-            if(val) {
-                const noteObj = { text: val, cat: currentCat, date: new Date().toLocaleDateString() };
-                notes.unshift(noteObj);
-                localStorage.setItem('v9_notes', JSON.stringify(notes));
-                document.getElementById('note-input').value = '';
-                renderNotes();
-                tg.HapticFeedback.notificationOccurred('success');
-            }
+        function changeSpec() {
+            spec = (spec === 'شريعة') ? 'دعوة وأصول الدين' : 'شريعة';
+            document.getElementById('u-spec').innerText = spec;
+            localStorage.setItem('v95_spec', spec);
+            tg.HapticFeedback.notificationOccurred('success');
         }
 
-        function renderNotes() {
-            const list = document.getElementById('notes-list');
-            list.innerHTML = '';
-            notes.forEach((n, i) => {
-                list.innerHTML += `
-                    <div class="note-item" onclick="interactNote('${n.text}')">
-                        <span class="note-cat-label">${n.cat}</span>
-                        <div style="font-size: 13px; margin-top: 5px;">${n.text}</div>
-                        <div style="font-size: 8px; color: #999; margin-top: 5px;">${n.date}</div>
-                        <i class="fa-solid fa-trash" style="position:absolute; left:15px; top:15px; color:#ffeded; font-size:12px;" onclick="deleteNote(event, ${i})"></i>
-                    </div>`;
-            });
-        }
-        
-        function interactNote(txt) {
-            tg.showConfirm("هل تريد نسخ هذه الفائدة؟", (ok) => {
-                if(ok) { navigator.clipboard.writeText(txt); tg.showAlert("تم النسخ ✅"); }
-            });
+        function setGender(g) {
+            document.body.className = 'mode-' + g;
+            localStorage.setItem('v95_gender', g);
         }
 
-        function deleteNote(e, i) {
-            e.stopPropagation();
-            notes.splice(i, 1);
-            localStorage.setItem('v9_notes', JSON.stringify(notes));
-            renderNotes();
+        function togglePattern() {
+            document.getElementById('mainBody').classList.toggle('andalusian-pattern');
         }
 
-        // وظائف عامة
-        function setGender(g) { document.body.className = 'mode-' + g; localStorage.setItem('v9_gender', g); }
-        function togglePattern() { document.getElementById('mainBody').classList.toggle('andalusian-pattern'); }
         function showPage(id, btn) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if(btn) { document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); btn.classList.add('active'); }
+            if(btn) {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            tg.HapticFeedback.impactOccurred('light');
         }
 
-        // تهيئة البيانات
-        setGender(localStorage.getItem('v9_gender') || 'boy');
-        document.getElementById('ts-count').innerText = ts;
-        renderNotes();
-        
+        // جلب بيانات تليجرام الحقيقية
         const user = tg.initDataUnsafe?.user;
         if(user) {
-            document.getElementById('u-name').innerText = user.first_name;
-            document.getElementById('u-id').innerText = "#ID-" + user.id.toString().slice(-4);
+            document.getElementById('u-name').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
             if(user.photo_url) document.getElementById('u-img').src = user.photo_url;
         }
     </script>
