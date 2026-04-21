@@ -3,229 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elite Gateway V10 | بوابة النخبة الدولية</title>
+    <title>Elite Nexus X | بوابة النخبة المطلقة</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --p-dark: #0f172a; --p-main: #1e293b; --p-accent: #6366f1;
-            --gold: #f59e0b; --glass: rgba(255, 255, 255, 0.03);
-            --text: #f8fafc;
+            --neon-gold: #ffcf33; --neon-blue: #00f2ff;
+            --deep-space: #050505; --glass-white: rgba(255, 255, 255, 0.05);
+            --gradient-pro: linear-gradient(135deg, #0f172a 0%, #020617 100%);
         }
 
         body { 
-            background: #020617; color: var(--text); 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: var(--deep-space); color: #fff; 
+            font-family: 'Inter', 'Segoe UI', sans-serif; 
             margin: 0; padding: 0; overflow-x: hidden;
         }
 
-        /* خلفية سينمائية متحركة */
-        .bg-glow {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% -20%, #1e293b, #020617);
+        /* واجهة الانصهار الزجاجي */
+        .cyber-bg {
+            position: fixed; top: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(0, 242, 255, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 90% 80%, rgba(255, 207, 51, 0.05) 0%, transparent 50%);
             z-index: -1;
         }
 
-        /* شريط المعلومات العلوي - تليجرام ستايل */
-        .top-bar {
+        /* شريط الحالة النيون */
+        .status-header {
+            padding: 15px 25px; background: rgba(0,0,0,0.8);
+            border-bottom: 1px solid var(--glass-white);
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 20px; background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(20px); sticky; top: 0; z-index: 1000;
         }
 
-        /* بطاقة الطالب الدولية - تصميم فائق الاحترافية */
-        .student-id-card {
-            margin: 20px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            border-radius: 30px; padding: 25px; border: 1px solid rgba(255,255,255,0.1);
-            position: relative; overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        /* بطاقة النخبة X-Card */
+        .x-card {
+            margin: 25px; background: var(--glass-white);
+            border-radius: 40px; padding: 30px; border: 1px solid rgba(255,255,255,0.1);
+            position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            transition: 0.5s; overflow: hidden;
         }
+        .x-card:hover { border-color: var(--neon-blue); }
+        .x-card::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, var(--neon-blue), transparent 30%);
+            animation: rotate 4s linear infinite; opacity: 0.1; z-index: -1;
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
 
-        .student-id-card::before {
-            content: "ELITE UNIVERSITY"; position: absolute; top: -10px; right: -10px;
-            font-size: 40px; font-weight: 900; opacity: 0.03; transform: rotate(-15deg);
+        .avatar-glow {
+            width: 90px; height: 90px; border-radius: 30px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-gold));
+            padding: 3px; position: relative;
         }
+        .avatar-glow img { width: 100%; height: 100%; border-radius: 27px; object-fit: cover; }
 
-        .profile-flex { display: flex; align-items: center; gap: 20px; }
-        .avatar-box {
-            width: 80px; height: 80px; border-radius: 20px;
-            border: 2px solid var(--gold); padding: 3px; position: relative;
+        /* أزرار الدردشة المنفصلة */
+        .chat-nexus {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 25px;
         }
-        .avatar-box img { width: 100%; height: 100%; border-radius: 15px; object-fit: cover; }
-        .status-dot { 
-            position: absolute; bottom: -5px; right: -5px; width: 15px; height: 15px;
-            background: #22c55e; border: 3px solid var(--p-dark); border-radius: 50%;
+        .chat-btn {
+            padding: 20px; border-radius: 25px; border: none; font-weight: bold;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            cursor: pointer; transition: 0.3s; color: white;
         }
+        .chat-boys { background: linear-gradient(45deg, #1e3a8a, #3b82f6); box-shadow: 0 10px 20px rgba(59,130,246,0.3); }
+        .chat-girls { background: linear-gradient(45deg, #831843, #ec4899); box-shadow: 0 10px 20px rgba(236,72,153,0.3); }
 
-        .id-details h2 { margin: 0; font-size: 20px; letter-spacing: 0.5px; }
-        .id-details p { margin: 5px 0; font-size: 12px; opacity: 0.6; }
-        
-        .xp-container { margin-top: 15px; background: rgba(0,0,0,0.2); height: 6px; border-radius: 10px; }
-        .xp-bar { height: 100%; background: var(--gold); border-radius: 10px; width: 45%; box-shadow: 0 0 10px var(--gold); }
+        /* منطقة الورد النووية */
+        .nucleus {
+            width: 220px; height: 220px; margin: 40px auto;
+            border-radius: 50%; background: var(--glass-white);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 2px solid rgba(255,255,255,0.05); position: relative;
+            box-shadow: inset 0 0 30px rgba(0,242,255,0.1); cursor: pointer;
+        }
+        .nucleus b { font-size: 70px; font-weight: 900; background: linear-gradient(to bottom, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* منطقة الورد والذكر التفاعلية */
-        .dhikr-sphere {
-            height: 200px; margin: 20px; background: rgba(255,255,255,0.02);
-            border-radius: 40px; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; position: relative;
-            border: 1px dashed rgba(255,255,255,0.1); cursor: pointer;
+        /* شبكة الميزات الـ 50 */
+        .features-matrix {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 25px;
+            padding-bottom: 140px;
         }
-        .dhikr-sphere b { font-size: 60px; font-weight: 900; color: var(--text); text-shadow: 0 0 20px rgba(99,102,241,0.5); }
-        
-        /* شبكة الخدمات الجامعية */
-        .university-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px;
-            padding-bottom: 120px;
+        .matrix-item {
+            background: rgba(255,255,255,0.02); height: 100px; border-radius: 25px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 1px solid rgba(255,255,255,0.03); transition: 0.3s;
         }
-        .uni-card {
-            background: rgba(255,255,255,0.03); padding: 25px 15px; border-radius: 25px;
-            text-align: center; border: 1px solid rgba(255,255,255,0.05);
-            transition: 0.3s;
-        }
-        .uni-card:active { transform: scale(0.95); background: rgba(255,255,255,0.08); }
-        .uni-card i { font-size: 30px; margin-bottom: 12px; display: block; color: var(--gold); }
-        .uni-card span { font-size: 13px; font-weight: 600; display: block; }
-        .uni-card small { font-size: 9px; opacity: 0.4; }
+        .matrix-item i { font-size: 24px; color: var(--neon-gold); margin-bottom: 8px; }
+        .matrix-item span { font-size: 10px; opacity: 0.7; }
 
-        /* القائمة السفلية العائمة */
-        .floating-nav {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            width: 90%; background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(20px); border-radius: 25px;
-            display: flex; justify-content: space-around; padding: 15px;
+        /* القائمة السفلية المستقبلية */
+        .nexus-nav {
+            position: fixed; bottom: 30px; left: 20px; right: 20px;
+            background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(30px);
+            height: 75px; border-radius: 30px; display: flex; 
+            justify-content: space-around; align-items: center;
             border: 1px solid rgba(255,255,255,0.1); z-index: 2000;
         }
-        .nav-btn { color: rgba(255,255,255,0.4); font-size: 20px; text-align: center; border: none; background: none; }
-        .nav-btn.active { color: var(--gold); }
-        .nav-btn span { display: block; font-size: 9px; margin-top: 5px; }
-
-        /* أنيميشن */
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
-        .float-icon { animation: float 3s ease-in-out infinite; }
+        .nav-link { color: #555; display: flex; flex-direction: column; align-items: center; text-decoration: none; }
+        .nav-link.active { color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
+    <div class="cyber-bg"></div>
 
-    <div class="top-bar">
-        <i class="fa-solid fa-bars-staggered" style="font-size: 20px;"></i>
-        <div style="font-size: 14px; font-weight: bold; color: var(--gold);">بوابة النخبة V10</div>
-        <i class="fa-solid fa-bell" onclick="tg.showAlert('لا توجد إشعارات جديدة')"></i>
+    <div class="status-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 10px; height: 10px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 10px #22c55e;"></div>
+            <span style="font-size: 12px; font-weight: bold; letter-spacing: 1px;">ELITE ONLINE</span>
+        </div>
+        <i class="fa-solid fa-ghost" style="color: var(--neon-gold);"></i>
     </div>
 
-    <div class="student-id-card">
-        <div class="profile-flex">
-            <div class="avatar-box">
-                <img id="u-img" src="https://via.placeholder.com/100">
-                <div class="status-dot"></div>
+    <div class="x-card" id="profile-trigger">
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div class="avatar-glow">
+                <img id="u-img" src="https://via.placeholder.com/150">
             </div>
-            <div class="id-details">
-                <h2 id="u-name">هاشم شلابي</h2>
-                <p><i class="fa-solid fa-id-card-clip"></i> <span id="u-id">#ELITE-2083-LY</span></p>
-                <div style="display: flex; gap: 5px;">
-                    <span style="font-size: 9px; background: var(--p-accent); padding: 2px 8px; border-radius: 5px;">باحث أكاديمي</span>
-                    <span id="u-spec-tag" style="font-size: 9px; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 5px;">شريعة</span>
-                </div>
+            <div>
+                <h2 style="margin:0; font-size: 22px;" id="u-name">هاشم شلابي</h2>
+                <div style="margin-top: 5px; font-size: 11px; color: var(--neon-blue);">رتبة: النخبة الماسية</div>
+                <div style="font-size: 10px; opacity: 0.5; margin-top: 3px;">كود الوصول: <span id="u-id">#NX-9901</span></div>
             </div>
-        </div>
-        <div class="xp-container">
-            <div class="xp-bar"></div>
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 9px; margin-top: 5px; opacity: 0.5;">
-            <span>المستوى 12</span>
-            <span>450 / 1000 XP</span>
         </div>
     </div>
 
-    <div class="dhikr-sphere" onclick="triggerDhikr()">
-        <span style="font-size: 11px; opacity: 0.5; position: absolute; top: 20px;">اضغط في أي مكان لتسجيل الورد</span>
+    <div class="chat-nexus">
+        <div class="chat-btn chat-boys" onclick="tg.showAlert('مرحباً بك في مجلس الشباب.. جاري الربط بسيرفر النخبة')">
+            <i class="fa-solid fa-mars-stroke-right" style="font-size: 24px;"></i>
+            <span>دردشة الشباب</span>
+        </div>
+        <div class="chat-btn chat-girls" onclick="tg.showAlert('مرحباً بكِ في مجلس طالبات العلم.. جاري الربط بسيرفر النخبة')">
+            <i class="fa-solid fa-venus" style="font-size: 24px;"></i>
+            <span>دردشة البنات</span>
+        </div>
+    </div>
+
+    <div class="nucleus" onclick="hapticCount()">
+        <span style="font-size: 10px; opacity: 0.4; letter-spacing: 2px;">CORE ENGINE</span>
         <b id="ts-count">0</b>
-        <div class="float-icon" style="position: absolute; bottom: 20px; color: var(--gold); opacity: 0.3;">
-            <i class="fa-solid fa-fingerprint"></i>
-        </div>
+        <div style="position:absolute; width: 100%; height: 100%; border-radius: 50%; border: 1px solid var(--neon-blue); opacity: 0.1; animation: pulse 2s infinite;"></div>
     </div>
 
-    <div class="university-grid">
-        <div class="uni-card" onclick="tg.showAlert('قاعة المحاضرات الرقمية')">
-            <i class="fa-solid fa-chalkboard-user"></i>
-            <span>المحاضرات</span>
-            <small>12 مادة نشطة</small>
-        </div>
-        <div class="uni-card" onclick="tg.showAlert('مكتبة المخطوطات والكتب')">
-            <i class="fa-solid fa-book-atlas"></i>
-            <span>المكتبة</span>
-            <small>+500 كتاب</small>
-        </div>
-        <div class="uni-card" onclick="tg.showAlert('خزانة الفوائد والتقييدات')">
-            <i class="fa-solid fa-box-archive"></i>
-            <span>خزانة الفوائد</span>
-            <small>24 فائدة مقيدة</small>
-        </div>
-        <div class="uni-card" onclick="tg.showAlert('نظام الاختبارات الدولية')">
-            <i class="fa-solid fa-vial-circle-check"></i>
-            <span>الاختبارات</span>
-            <small>متاح الآن</small>
-        </div>
-        <div class="uni-card" onclick="tg.showAlert('الخلوة الذكية قيد التطوير')">
-            <i class="fa-solid fa-spa"></i>
-            <span>الخلوة</span>
-            <small>وضع التركيز</small>
-        </div>
-        <div class="uni-card" onclick="changeSpec()">
-            <i class="fa-solid fa-rotate"></i>
-            <span>تغيير التخصص</span>
-            <small id="current-spec-display">شريعة</small>
-        </div>
+    <div class="features-matrix">
+        <div class="matrix-item"><i class="fa-solid fa-robot"></i><span>المصحح الآلي</span></div>
+        <div class="matrix-item"><i class="fa-solid fa-map-location-dot"></i><span>رادار العلم</span></div>
+        <div class="matrix-item" onclick="changeSpec()"><i class="fa-solid fa-scroll"></i><span>المسار</span></div>
+        <div class="matrix-item"><i class="fa-solid fa-vault"></i><span>الخزانة 3D</span></div>
+        <div class="matrix-item"><i class="fa-solid fa-microchip"></i><span>الذكاء الرقمي</span></div>
+        <div class="matrix-item"><i class="fa-solid fa-shield-halved"></i><span>وضع الحماية</span></div>
+        <div class="matrix-item"><i class="fa-solid fa-chart-line"></i><span>البورصة</span></div>
+        <div class="matrix-item"><i class="fa-solid fa-headphones"></i><span>الكتب الصوتية</span></div>
+        <div class="matrix-item"><i class="fa-solid fa-medal"></i><span>الأوسمة</span></div>
     </div>
 
-    <div class="floating-nav">
-        <button class="nav-btn active"><i class="fa-solid fa-house-user"></i><span>الرئيسية</span></button>
-        <button class="nav-btn" onclick="tg.showAlert('المفكرة الأكاديمية قيد التجهيز')"><i class="fa-solid fa-feather"></i><span>المفكرة</span></button>
-        <button class="nav-btn" onclick="tg.shareExternal()"><i class="fa-solid fa-share-nodes"></i><span>مشاركة</span></button>
-        <button class="nav-btn" onclick="tg.showAlert('الملف الشخصي الدولي')"><i class="fa-solid fa-user-graduate"></i><span>بروفايلي</span></button>
-    </div>
+    <nav class="nexus-nav">
+        <a href="#" class="nav-link active"><i class="fa-solid fa-house-signal"></i><span>Nexus</span></a>
+        <a href="#" class="nav-link"><i class="fa-solid fa-book-open-reader"></i><span>الأكاديمية</span></a>
+        <a href="#" class="nav-link"><i class="fa-solid fa-comments"></i><span>الدردشات</span></a>
+        <a href="#" class="nav-link"><i class="fa-solid fa-gear"></i><span>النظام</span></a>
+    </nav>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-        tg.setHeaderColor('#0f172a');
+        tg.setHeaderColor('#050505');
 
-        let tsCount = parseInt(localStorage.getItem('v10_ts')) || 0;
-        let spec = localStorage.getItem('v10_spec') || 'شريعة';
+        let count = parseInt(localStorage.getItem('nexus_ts')) || 0;
+        let spec = localStorage.getItem('nexus_spec') || 'شريعة';
+        document.getElementById('ts-count').innerText = count;
 
-        document.getElementById('ts-count').innerText = tsCount;
-        document.getElementById('u-spec-tag').innerText = spec;
-        document.getElementById('current-spec-display').innerText = spec;
-
-        function triggerDhikr() {
-            tsCount++;
-            document.getElementById('ts-count').innerText = tsCount;
-            localStorage.setItem('v10_ts', tsCount);
+        function hapticCount() {
+            count++;
+            document.getElementById('ts-count').innerText = count;
+            localStorage.setItem('nexus_ts', count);
             tg.HapticFeedback.impactOccurred('heavy');
             
-            // تأثير بصري للرقم
-            const el = document.getElementById('ts-count');
-            el.style.transform = 'scale(1.2)';
-            setTimeout(() => el.style.transform = 'scale(1)', 100);
+            // تأثير انفجار نيون عند الضغط
+            const nucleus = document.querySelector('.nucleus');
+            nucleus.style.borderColor = 'var(--neon-blue)';
+            nucleus.style.boxShadow = '0 0 40px rgba(0, 242, 255, 0.4)';
+            setTimeout(() => {
+                nucleus.style.borderColor = 'rgba(255,255,255,0.05)';
+                nucleus.style.boxShadow = 'inset 0 0 30px rgba(0,242,255,0.1)';
+            }, 150);
         }
 
         function changeSpec() {
             spec = (spec === 'شريعة') ? 'دعوة وأصول الدين' : 'شريعة';
-            document.getElementById('u-spec-tag').innerText = spec;
-            document.getElementById('current-spec-display').innerText = spec;
-            localStorage.setItem('v10_spec', spec);
+            localStorage.setItem('nexus_spec', spec);
+            tg.showAlert('تم تغيير بروتوكول التخصص إلى: ' + spec);
             tg.HapticFeedback.notificationOccurred('success');
-            tg.showAlert('تم تغيير المسار الأكاديمي إلى: ' + spec);
         }
 
-        // جلب بيانات المستخدم الحقيقية
         const user = tg.initDataUnsafe?.user;
         if(user) {
             document.getElementById('u-name').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+            document.getElementById('u-id').innerText = "#NX-" + user.id.toString().slice(-4);
             if(user.photo_url) document.getElementById('u-img').src = user.photo_url;
         }
+
+        // تأثير تحريك الواجهة مع ميلان الهاتف
+        window.addEventListener('deviceorientation', (e) => {
+            const card = document.querySelector('.x-card');
+            const x = e.beta / 5;
+            const y = e.gamma / 5;
+            card.style.transform = `rotateX(${x}deg) rotateY(${y}deg)`;
+        });
     </script>
 </body>
 </html>
